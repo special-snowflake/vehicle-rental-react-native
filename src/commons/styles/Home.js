@@ -2,6 +2,12 @@ import {Dimensions, StyleSheet} from 'react-native';
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 const styles = StyleSheet.create({
+  marginLoading: {
+    marginTop: 50,
+  },
+  backgroundWhite: {
+    backgroundColor: 'white',
+  },
   jumboTronWrapper: {
     height: 250,
     width: width,
@@ -16,19 +22,19 @@ const styles = StyleSheet.create({
   },
   inputSearch: {
     position: 'absolute',
-    top: 30,
+    top: 35,
     left: 20,
     right: 20,
     padding: 15,
     paddingRight: 40,
     color: '#FFFFFF',
     borderRadius: 8,
-    backgroundColor: '#000000',
-    opacity: 0.7,
+    backgroundColor: '#000000B3',
+    // opacity: 0.7,
   },
   searchLogo: {
     position: 'absolute',
-    top: 45,
+    top: 50,
     left: 'auto',
     right: 30,
     width: 25,

@@ -1,4 +1,13 @@
-import {View, Text, ScrollView, ImageBackground, Image} from 'react-native';
+import {
+  ActivityIndicator,
+  View,
+  Text,
+  ScrollView,
+  ImageBackground,
+  TouchableOpacity,
+  ToastAndroid,
+  Image,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 
 import styles from '../commons/styles/Home';
@@ -6,7 +15,7 @@ import {TextInput} from 'react-native-gesture-handler';
 import {searchVehicle} from '../modules/utils/vehicles';
 import axios from 'axios';
 const imagehost = process.env.URL_API + '/vehicles';
-const Home = () => {
+const Home = ({navigation}) => {
   const [search, setSearch] = useState(null);
   const [listVehicles, setListVehicles] = useState({
     dataBike: [],
@@ -39,7 +48,7 @@ const Home = () => {
       });
   }, []);
   return (
-    <ScrollView>
+    <ScrollView style={{backgroundColor: 'white'}}>
       <View style={styles.jumboTronWrapper}>
         <ImageBackground
           source={require('../commons/assets/images/background-home.png')}
@@ -59,23 +68,34 @@ const Home = () => {
         />
       </View>
       <View>
-        {listVehicles.isSuccess && (
+        {listVehicles.isSuccess ? (
           <>
             <View style={styles.cardWrapper}>
               <View style={styles.headerWrapper}>
                 <Text style={styles.itemHeader}>Cars</Text>
-                <Text style={styles.more}>View More</Text>
+                <Text
+                  style={styles.more}
+                  onPress={() => {
+                    navigation.navigate('VehicleCategory', 'Car');
+                  }}>
+                  View More
+                </Text>
               </View>
               <ScrollView
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}>
                 {listVehicles.dataCar.map(element => {
                   return (
-                    <Image
-                      source={{uri: imagehost + element.image}}
-                      style={styles.cardVehicles}
+                    <TouchableOpacity
                       key={`car-${element.id}`}
-                    />
+                      onPress={() => {
+                        navigation.navigate('DetailVehicle', element.id);
+                      }}>
+                      <Image
+                        source={{uri: imagehost + element.image}}
+                        style={styles.cardVehicles}
+                      />
+                    </TouchableOpacity>
                   );
                 })}
               </ScrollView>
@@ -84,18 +104,29 @@ const Home = () => {
             <View style={styles.cardWrapper}>
               <View style={styles.headerWrapper}>
                 <Text style={styles.itemHeader}>Motorbike</Text>
-                <Text style={styles.more}>View More</Text>
+                <Text
+                  style={styles.more}
+                  onPress={() => {
+                    navigation.navigate('VehicleCategory', 'Motorbike');
+                  }}>
+                  View More
+                </Text>
               </View>
               <ScrollView
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}>
                 {listVehicles.dataMotorCycle.map(element => {
                   return (
-                    <Image
-                      source={{uri: imagehost + element.image}}
-                      style={styles.cardVehicles}
+                    <TouchableOpacity
                       key={`motor-${element.id}`}
-                    />
+                      onPress={() => {
+                        navigation.navigate('DetailVehicle', element.id);
+                      }}>
+                      <Image
+                        source={{uri: imagehost + element.image}}
+                        style={styles.cardVehicles}
+                      />
+                    </TouchableOpacity>
                   );
                 })}
               </ScrollView>
@@ -104,23 +135,38 @@ const Home = () => {
             <View style={styles.cardWrapper}>
               <View style={styles.headerWrapper}>
                 <Text style={styles.itemHeader}>Bike</Text>
-                <Text style={styles.more}>View More</Text>
+                <Text
+                  style={styles.more}
+                  onPress={() => {
+                    navigation.navigate('VehicleCategory', 'Bike');
+                  }}>
+                  View More
+                </Text>
               </View>
               <ScrollView
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}>
                 {listVehicles.dataBike.map(element => {
                   return (
-                    <Image
-                      source={{uri: imagehost + element.image}}
-                      style={styles.cardVehicles}
+                    <TouchableOpacity
                       key={`bike-${element.id}`}
-                    />
+                      onPress={() => {
+                        navigation.navigate('DetailVehicle', element.id);
+                      }}>
+                      <Image
+                        source={{uri: imagehost + element.image}}
+                        style={styles.cardVehicles}
+                      />
+                    </TouchableOpacity>
                   );
                 })}
               </ScrollView>
             </View>
           </>
+        ) : (
+          <View style={styles.marginLoading}>
+            <ActivityIndicator size="large" color="#FFCD61" />
+          </View>
         )}
       </View>
     </ScrollView>

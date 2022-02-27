@@ -13,6 +13,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import History from './screens/History';
 import Chat from './screens/Chat';
 import {Image, StyleSheet, View} from 'react-native';
+import VehicleCategory from './screens/VehicleCategory';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -38,7 +39,12 @@ const HomeTab = () => {
         component={Home}
         screenOptions={{headerShown: false}}
       />
-      <Stack.Screen name="DetailVehicle1" component={DetailVehicle} />
+      <Stack.Screen name="DetailVehicle" component={DetailVehicle} />
+      <Stack.Screen
+        options={{headerShown: true}}
+        name="VehicleCategory"
+        component={VehicleCategory}
+      />
     </Stack.Navigator>
   );
 };
@@ -149,6 +155,7 @@ const StackTab = () => {
               />
             </View>
           ),
+          tabBarBadge: 2,
         }}
       />
       <Tab.Screen
