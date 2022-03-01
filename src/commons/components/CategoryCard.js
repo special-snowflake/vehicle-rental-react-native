@@ -28,7 +28,7 @@ const CategoryCard = ({navigation, data}) => {
             <Image
               source={{uri: uriImage}}
               style={style.image}
-              resizeMethod="scale"
+              resizeMethod="resize"
               resizeMode="cover"
             />
           </View>

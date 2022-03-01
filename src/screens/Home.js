@@ -14,9 +14,11 @@ import styles from '../commons/styles/Home';
 import {TextInput} from 'react-native-gesture-handler';
 import {searchVehicle} from '../modules/utils/vehicles';
 import axios from 'axios';
+import {useSelector} from 'react-redux';
 const imagehost = process.env.URL_API + '/vehicles';
 const Home = ({navigation}) => {
   const [search, setSearch] = useState(null);
+  const user = useSelector(state => state.auth.userData);
   const [listVehicles, setListVehicles] = useState({
     dataBike: [],
     dataCar: [],
@@ -25,6 +27,7 @@ const Home = ({navigation}) => {
   });
 
   console.log('list vegicles', listVehicles);
+  console.log('data user', user);
   useEffect(() => {
     const urlBike = searchVehicle('?keyword=&category=2&sort=asc&limit=5');
     const urlCar = searchVehicle('?keyword=&category=1&sort=asc&limit=5');
@@ -62,10 +65,30 @@ const Home = ({navigation}) => {
             setSearch(text.nativeEvent.text);
           }}
         />
-        <Image
-          source={require('../commons/assets/icons/search.png')}
+        <TouchableOpacity
           style={styles.searchLogo}
-        />
+          onPress={navigation.navigate('SearchVehicle', search)}>
+          <Image
+            source={require('../commons/assets/icons/search.png')}
+            style={{width: 25, height: 25}}
+            // style={styles.searchLogo}
+          />
+        </TouchableOpacity>
+        {user.roles && user.roles === 'owner' ? (
+          <TouchableOpacity
+            style={styles.addNewItem}
+            onPress={() => {
+              console.log('go to AddNewItem');
+              // navigation.navigate('AddNewItem');
+            }}>
+            <Text
+              style={{fontSize: 18, fontWeight: 'bold', textAlign: 'center'}}>
+              Add new item
+            </Text>
+          </TouchableOpacity>
+        ) : (
+          <></>
+        )}
       </View>
       <View>
         {listVehicles.isSuccess ? (

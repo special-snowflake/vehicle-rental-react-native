@@ -14,6 +14,8 @@ import History from './screens/History';
 import Chat from './screens/Chat';
 import {Image, StyleSheet, View} from 'react-native';
 import VehicleCategory from './screens/VehicleCategory';
+import UpdateProfile from './screens/UpdateProfile';
+import SearchVehicle from './screens/SearchVehicle';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -40,6 +42,7 @@ const HomeTab = () => {
         screenOptions={{headerShown: false}}
       />
       <Stack.Screen name="DetailVehicle" component={DetailVehicle} />
+      <Stack.Screen name="SearchVehicle" component={SearchVehicle} />
       <Stack.Screen
         options={{headerShown: true}}
         name="VehicleCategory"
@@ -74,9 +77,13 @@ const ChatTab = () => {
 
 const ProfileTab = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="Profile1" component={Profile} />
-      <Stack.Screen name="DetailVehicle2" component={DetailVehicle} />
+      <Stack.Screen
+        name="UpdateProfile"
+        component={UpdateProfile}
+        options={{title: 'Update Profile', headerShown: true}}
+      />
     </Stack.Navigator>
   );
 };
@@ -187,11 +194,11 @@ const StackTab = () => {
 
 const Router = () => (
   <Stack.Navigator screenOptions={{headerShown: false}}>
+    <Stack.Screen name="StackTab" component={StackTab} />
     <Stack.Screen name="Login" component={Login} />
     <Stack.Screen name="HomeAuth" component={Home} />
     <Stack.Screen name="SignUpAuth" component={SignUp} />
     <Stack.Screen name="ForgetPasswordAuth" component={Login} />
-    <Stack.Screen name="StackTab" component={StackTab} />
   </Stack.Navigator>
 );
 

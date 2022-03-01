@@ -32,6 +32,18 @@ const styles = StyleSheet.create({
     backgroundColor: '#000000B3',
     // opacity: 0.7,
   },
+  addNewItem: {
+    position: 'absolute',
+    top: 110,
+    left: 20,
+    right: 20,
+    padding: 15,
+    paddingRight: 40,
+    color: '#FFFFFF',
+    borderRadius: 8,
+    backgroundColor: '#FFCD61',
+    // opacity: 0.7,
+  },
   searchLogo: {
     position: 'absolute',
     top: 50,
@@ -65,6 +77,9 @@ const styles = StyleSheet.create({
     flex: 1,
     // backgroundColor: 'grey',
     textAlign: 'right',
+    textDecorationLine: 'underline',
+    textDecorationStyle: 'solid',
+    textDecorationColor: '#000',
   },
   cardVehicles: {
     width: 250,

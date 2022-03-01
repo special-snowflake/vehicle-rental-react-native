@@ -1,12 +1,155 @@
-import {View, Text} from 'react-native';
-import React from 'react';
+import {View, Text, Image, ActivityIndicator} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
+import {useSelector, useDispatch} from 'react-redux';
 
-const Profile = () => {
+import {logoutAction} from '../redux/actions/auth';
+import {logout} from '../modules/utils/auth';
+
+import style from '../commons/styles/Profile';
+import {getUserDetail} from '../modules/utils/user';
+
+const defaultUser = require('../commons/assets/images/defaultSmall.jpg');
+const imagehost = process.env.URL_API + '/users';
+
+const Profile = ({navigation}) => {
+  const user = useSelector(state => state.auth.userData);
+  const [userInfo, setUserInfo] = useState(null);
+  const [image, setImage] = useState(defaultUser);
+
+  const dispatch = useDispatch();
+  const handleLogout = () => {
+    console.log(user);
+    console.log('token', user.token);
+    console.log('logout');
+    logout(user.token);
+    dispatch(logoutAction());
+    navigation.replace('Login');
+  };
+  if (user.token === '' || !user.token) {
+    navigation.navigate('Login');
+  }
+  const getUserInfo = () => {
+    const id = user.id;
+    getUserDetail(id)
+      .then(res => {
+        console.log(res);
+        setUserInfo(res.data.data);
+        const newImage = imagehost + res.data.data.photo;
+        console.log('new image', newImage);
+        setImage({uri: newImage});
+      })
+      .catch(err => {
+        console.log(err.response);
+      });
+  };
+  useEffect(() => {
+    getUserInfo();
+  }, []);
   return (
-    <View>
-      <Text>Profile</Text>
-    </View>
+    <ScrollView style={style.viewScroll}>
+      {userInfo !== null ? (
+        <>
+          <View style={style.profileHeader}>
+            <View style={style.imageWrapper}>
+              <Image
+                source={image}
+                onError={({currentTarget}) => {
+                  currentTarget.onerror = null;
+                  setImage(defaultUser);
+                }}
+                style={style.userImage}
+                resizeMethod="resize"
+                resizeMode="cover"
+              />
+            </View>
+            <View style={style.nameWrapper}>
+              <Text style={style.name}>{userInfo.full_name}</Text>
+            </View>
+          </View>
+          <View style={style.menuWrapper}>
+            <View style={style.menuText}>
+              <Text style={style.menuTextContent}>Your favourite</Text>
+            </View>
+            <View style={style.menuImageWrapper}>
+              <Image
+                source={require('../commons/assets/icons/next.png')}
+                resizeMethod="scale"
+                resizeMode="cover"
+                style={style.menuImage}
+              />
+            </View>
+          </View>
+          <View style={style.menuWrapper}>
+            <View style={style.menuText}>
+              <Text style={style.menuTextContent}>FAQ</Text>
+            </View>
+            <View style={style.menuImageWrapper}>
+              <Image
+                source={require('../commons/assets/icons/next.png')}
+                resizeMethod="scale"
+                resizeMode="cover"
+                style={style.menuImage}
+              />
+            </View>
+          </View>
+          <View style={style.menuWrapper}>
+            <View style={style.menuText}>
+              <Text style={style.menuTextContent}>Help</Text>
+            </View>
+            <View style={style.menuImageWrapper}>
+              <Image
+                source={require('../commons/assets/icons/next.png')}
+                resizeMethod="scale"
+                resizeMode="cover"
+                style={style.menuImage}
+              />
+            </View>
+          </View>
+          <TouchableOpacity
+            onPress={() => {
+              console.log('goto update profile');
+              navigation.navigate('UpdateProfile');
+            }}>
+            <View style={style.menuWrapper}>
+              <View style={style.menuText}>
+                <Text style={style.menuTextContent}>Update Profile</Text>
+              </View>
+              <View style={style.menuImageWrapper}>
+                <Image
+                  source={require('../commons/assets/icons/next.png')}
+                  resizeMethod="scale"
+                  resizeMode="cover"
+                  style={style.menuImage}
+                />
+              </View>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              handleLogout();
+            }}
+            style={{padding: 15, marginTop: 150}}>
+            <View style={style.buttonLogout}>
+              <Text style={style.buttonText}>Logout</Text>
+            </View>
+          </TouchableOpacity>
+        </>
+      ) : (
+        <View style={style.marginLoading}>
+          <ActivityIndicator size="large" color="#FFCD61" />
+        </View>
+      )}
+
+      {/* </View> */}
+    </ScrollView>
   );
 };
+// const mapStateToProps = state => {
+//   return {
+//     token: state.auth.userData.token,
+//   };
+// };
 
+// export default connect(mapStateToProps)(Profile);
 export default Profile;

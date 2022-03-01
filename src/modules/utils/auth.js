@@ -9,3 +9,11 @@ export const register = body => {
   const urlRegister = URL + '/register';
   return axios.post(urlRegister, body);
 };
+
+export const logout = token => {
+  return axios.delete(URL, {
+    headers: {
+      'x-authorized-token': token,
+    },
+  });
+};

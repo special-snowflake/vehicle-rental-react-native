@@ -11,6 +11,7 @@ import styles from '../commons/styles/Auth';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {connect, useDispatch} from 'react-redux';
 import {loginAction} from '../redux/actions/auth';
+import {} from 'react-native-toast-message';
 
 const Login = props => {
   const [email, setEmail] = useState(null);
@@ -28,11 +29,19 @@ const Login = props => {
 
   useEffect(() => {
     if (props.auth.isFulfilled === true) {
+      // Toast.show({
+      //   type: 'success',
+      //   text1: 'Login Success 👋',
+      // });
       // return navigate('/', {replace: true});
       navigation.navigate('StackTab');
       console.log('login success');
     }
     if (props.auth.isRejected === true) {
+      // Toast.show({
+      //   type: 'error',
+      //   text1: 'Login Failed 😥',
+      // });
       console.log('login failed');
     }
   }, [props.auth, navigation]);
