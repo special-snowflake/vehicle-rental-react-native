@@ -82,7 +82,7 @@ const Login = props => {
                 <Text
                   style={styles.signup}
                   onPress={() => {
-                    navigation.navigate('StackTab');
+                    navigation.navigate('SignUpAuth');
                   }}>
                   Sign up now
                 </Text>

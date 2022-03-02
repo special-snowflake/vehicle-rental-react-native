@@ -64,10 +64,15 @@ const Home = ({navigation}) => {
           onChange={text => {
             setSearch(text.nativeEvent.text);
           }}
+          onSubmitEditing={() => {
+            navigation.navigate('SearchVehicle', search);
+          }}
         />
         <TouchableOpacity
-          style={styles.searchLogo}
-          onPress={navigation.navigate('SearchVehicle', search)}>
+          style={{...styles.searchLogo}}
+          onPress={() => {
+            navigation.navigate('SearchVehicle', search);
+          }}>
           <Image
             source={require('../commons/assets/icons/search.png')}
             style={{width: 25, height: 25}}

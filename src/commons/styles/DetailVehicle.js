@@ -71,6 +71,9 @@ const styles = StyleSheet.create({
   itemRight: {
     flex: 1,
     textAlign: 'right',
+    // backgroundColor: 'lightgrey',
+    position: 'relative',
+    height: 40,
   },
   textSelect: {
     fontWeight: 'bold',
