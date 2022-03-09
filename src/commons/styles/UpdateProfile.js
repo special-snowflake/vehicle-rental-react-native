@@ -67,5 +67,17 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
   },
+  buttonBlack: {
+    backgroundColor: '#393939',
+    padding: 15,
+    borderRadius: 7,
+    marginVertical: 15,
+  },
+  textButtonBlack: {
+    color: '#FFCD61',
+    textAlign: 'center',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
 });
 export default styles;

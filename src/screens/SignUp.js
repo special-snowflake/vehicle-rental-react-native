@@ -83,6 +83,15 @@ const SignUp = ({navigation}) => {
                 </Text>
               </Text>
             </View>
+            <View style={{marginVertical: 30}}>
+              <Text
+                style={styles.signupWrapper}
+                onPress={() => {
+                  navigation.navigate('StackTab');
+                }}>
+                Back to Home
+              </Text>
+            </View>
           </View>
         </View>
       </ImageBackground>

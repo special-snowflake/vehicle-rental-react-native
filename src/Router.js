@@ -16,6 +16,9 @@ import {Image, StyleSheet, View} from 'react-native';
 import VehicleCategory from './screens/VehicleCategory';
 import UpdateProfile from './screens/UpdateProfile';
 import SearchVehicle from './screens/SearchVehicle';
+import Transaction1 from './screens/Transaction1';
+import Transaction2 from './screens/Transaction2';
+import Transaction3 from './screens/Transaction3';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -65,11 +68,15 @@ const HistoryTab = () => {
 };
 const ChatTab = () => {
   return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
+    <Stack.Navigator screenOptions={{headerShown: true}}>
       <Stack.Screen
         name="Chat1"
         component={Chat}
-        screenOptions={{headerShown: false}}
+        options={{
+          title: 'Chat',
+          headerShown: true,
+        }}
+        // screenOptions={{headerShown: true}}
       />
     </Stack.Navigator>
   );
@@ -163,6 +170,7 @@ const StackTab = () => {
             </View>
           ),
           tabBarBadge: 2,
+          tabBarBadgeStyle: {backgroundColor: '#393939'},
         }}
       />
       <Tab.Screen
@@ -196,6 +204,21 @@ const Router = () => (
   <Stack.Navigator screenOptions={{headerShown: false}}>
     <Stack.Screen name="StackTab" component={StackTab} />
     <Stack.Screen name="Login" component={Login} />
+    <Stack.Screen
+      name="Transaction1"
+      component={Transaction1}
+      options={{title: 'Payment', headerShown: true}}
+    />
+    <Stack.Screen
+      name="Transaction2"
+      component={Transaction2}
+      options={{title: 'Payment', headerShown: true}}
+    />
+    <Stack.Screen
+      name="Transaction3"
+      component={Transaction3}
+      options={{title: 'Payment', headerShown: true}}
+    />
     <Stack.Screen name="HomeAuth" component={Home} />
     <Stack.Screen name="SignUpAuth" component={SignUp} />
     <Stack.Screen name="ForgetPasswordAuth" component={Login} />

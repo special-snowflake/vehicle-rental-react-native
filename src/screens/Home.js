@@ -6,12 +6,13 @@ import {
   ImageBackground,
   TouchableOpacity,
   ToastAndroid,
+  TextInput,
   Image,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 
 import styles from '../commons/styles/Home';
-import {TextInput} from 'react-native-gesture-handler';
+// import {TextInput} from 'react-native-gesture-handler';
 import {searchVehicle} from '../modules/utils/vehicles';
 import axios from 'axios';
 import {useSelector} from 'react-redux';

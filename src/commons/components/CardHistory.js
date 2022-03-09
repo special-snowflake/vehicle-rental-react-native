@@ -18,34 +18,32 @@ const CardHistory = ({navigation, data}) => {
     console.log(el, idx);
     const uriImage = imghost + el.image;
     elements.push(
-      <>
-        <View style={styles.contentListWrapper}>
-          <View style={{flex: 3}}>
-            <View style={styles.contentImageWrapper}>
-              <View style={{flex: 3}}>
-                <Image
-                  source={{uri: uriImage}}
-                  onError={({currentTarget}) => {
-                    currentTarget.onerror = null;
-                    currentTarget.src = {defaultVehicle};
-                  }}
-                  resizeMethod="resize"
-                  resizeMode="cover"
-                  style={styles.contentImage}
-                />
-              </View>
-              <View style={{flex: 3, height: 90}}>
-                <Text style={{fontWeight: 'bold'}}>{el.name}</Text>
-                <Text>{el.rental_date}</Text>
-                <Text>Rp.{numberToRupiah(el.total_payment)}</Text>
-              </View>
+      <View style={styles.contentListWrapper} key={`History-${idx}`}>
+        <View style={{flex: 3}}>
+          <View style={styles.contentImageWrapper}>
+            <View style={{flex: 3}}>
+              <Image
+                source={{uri: uriImage}}
+                onError={({currentTarget}) => {
+                  currentTarget.onerror = null;
+                  currentTarget.src = {defaultVehicle};
+                }}
+                resizeMethod="resize"
+                resizeMode="cover"
+                style={styles.contentImage}
+              />
+            </View>
+            <View style={{flex: 3, height: 90}}>
+              <Text style={{fontWeight: 'bold'}}>{el.name}</Text>
+              <Text>{el.rental_date}</Text>
+              <Text>Rp.{numberToRupiah(el.total_payment)}</Text>
             </View>
           </View>
-          <View style={styles.checkboxWrapper}>
-            <Text style={styles.textRight}>✅</Text>
-          </View>
         </View>
-      </>,
+        <View style={styles.checkboxWrapper}>
+          <Text style={styles.textRight}>✅</Text>
+        </View>
+      </View>,
     );
   });
   return elements;

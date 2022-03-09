@@ -70,24 +70,22 @@ const SearchVehicle = ({navigation, route}) => {
     console.log('pagination meta', meta);
     for (let i = 1; i < meta.totalPage + 1; i++) {
       elements.push(
-        <>
-          <TouchableOpacity
-            // eslint-disable-next-line react-native/no-inline-styles
-            style={{
-              ...styles.paginationWrapper,
-              backgroundColor: i === filter.page ? '#ededed' : '#FFCD61',
-            }}
-            key={`pagination-${i}`}
-            onPress={() => {
-              if (i !== filter.page) {
-                const newFilter = {...filter, page: i};
-                setFilter(newFilter);
-                setIsLoading(true);
-              }
-            }}>
-            <Text style={styles.paginationButton}>{i}</Text>
-          </TouchableOpacity>
-        </>,
+        <TouchableOpacity
+          // eslint-disable-next-line react-native/no-inline-styles
+          style={{
+            ...styles.paginationWrapper,
+            backgroundColor: i === filter.page ? '#ededed' : '#FFCD61',
+          }}
+          key={`pagination-${i}`}
+          onPress={() => {
+            if (i !== filter.page) {
+              const newFilter = {...filter, page: i};
+              setFilter(newFilter);
+              setIsLoading(true);
+            }
+          }}>
+          <Text style={styles.paginationButton}>{i}</Text>
+        </TouchableOpacity>,
       );
     }
     return elements;

@@ -14,13 +14,15 @@ import {numberToRupiah} from '../modules/helpers/collection';
 import {useSelector} from 'react-redux';
 const defaultCar = require('../commons/assets/images/car-default.jpg');
 
-import DatePicker from 'react-native-date-picker';
-import SelectDropdown from 'react-native-select-dropdown';
+import DateTimePicker from 'react-native-modal-datetime-picker';
+import {Picker} from '@react-native-picker/picker';
 
 const imagehost = process.env.URL_API + '/vehicles';
 
 const DetailVehicle = ({navigation, route}) => {
   const [dataVehicle, setDataVehicle] = useState(null);
+  const [showDate, setShowDate] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
   const [image, setImage] = useState(defaultCar);
   const [counter, setCounter] = useState(1);
   const user = useSelector(state => state.auth.userData);
@@ -29,6 +31,11 @@ const DetailVehicle = ({navigation, route}) => {
   const [date, setDate] = useState(new Date());
 
   const day = [1, 2, 3, 4, 5, 6, 7];
+
+  const handleDatePicker = date => {
+    console.log('A date has been picked: ', date);
+    setShowDate(false);
+  };
 
   const handleCounter = val => {
     if (val === 'add') {
@@ -93,8 +100,7 @@ const DetailVehicle = ({navigation, route}) => {
                 onPress={() => {
                   navigation.navigate('Chat');
                 }}
-                // style={{position: 'absolute', left: 'auto', right: 20}}
-              >
+                style={{width: 30}}>
                 <Image
                   source={require('../commons/assets/icons/chat.png')}
                   style={{width: 30, height: 30}}
@@ -135,76 +141,62 @@ const DetailVehicle = ({navigation, route}) => {
               </TouchableOpacity>
             </View>
           </View>
-          {user.roles !== 'owner' || !user.roles ? (
+          {user.token === '' || !user.token ? (
             <>
-              <View
-                style={{
-                  marginTop: 10,
-                  flexDirection: 'row',
-                  flexWrap: 'wrap',
-                  // alignItems: 'center',
-                  justifyContent: 'space-between',
-                }}>
+              <Text style={{marginTop: 15, textAlign: 'center', fontSize: 16}}>
+                You need to login to make a reservation
+              </Text>
+              <View style={{padding: 10, marginTop: 20}}>
                 <TouchableOpacity
-                  style={{
-                    padding: 12,
-                    marginHorizontal: 10,
-                    backgroundColor: 'rgba(57, 57, 57, 0.3)',
-                    borderRadius: 7,
-                    width: 200,
-                  }}
+                  style={style.buttonYellow}
                   onPress={() => {
-                    setOpen(true);
+                    navigation.navigate('Login');
                   }}>
-                  <Text style={{textAlign: 'center'}}>Select Date</Text>
+                  <Text style={style.buttonText}>Login</Text>
                 </TouchableOpacity>
-                <SelectDropdown
-                  data={day}
-                  buttonStyle={{
-                    padding: 12,
-                    marginHorizontal: 10,
-                    backgroundColor: 'rgba(57, 57, 57, 0.3)',
-                    borderRadius: 7,
-                    width: 140,
-                  }}
-                  buttonTextStyle={{fontSize: 15}}
-                  defaultButtonText={'Select'}
-                  onSelect={(selectedItem, index) => {
-                    console.log(selectedItem, index);
-                  }}
-                  buttonTextAfterSelection={(selectedItem, index) => {
-                    return selectedItem;
-                  }}
-                  rowTextForSelection={(item, index) => {
-                    return item;
-                  }}
-                />
-                {/* <ModalDropdown options={['option 1', 'option 2']} /> */}
-                {/* <TouchableOpacity
-                  style={{
-                    padding: 12,
-                    borderRadius: 7,
-                    marginHorizontal: 10,
-                    backgroundColor: 'rgba(57, 57, 57, 0.3)',
-                    width: 140,
+              </View>
+            </>
+          ) : user.roles !== 'owner' ? (
+            <>
+              <View style={style.wrapperPicker}>
+                <TouchableOpacity
+                  style={style.pickerLeft}
+                  onPress={() => {
+                    setShowDate(true);
                   }}>
-                  <Text style={{textAlign: 'center'}}>Select</Text>
-                </TouchableOpacity> */}
-                <DatePicker
-                  modal
-                  open={open}
-                  date={date}
-                  onConfirm={date => {
-                    setOpen(false);
-                    setDate(date);
-                  }}
-                  onCancel={() => {
-                    setOpen(false);
-                  }}
+                  <Text style={{textAlign: 'center', fontSize: 16}}>
+                    Select Date
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={style.pickerRight}>
+                  <Picker>
+                    <Picker.Item
+                      label="Prepayment (No Tax)"
+                      value={'Prepayment'}
+                    />
+                    <Picker.Item
+                      label="Pay At The End (Include Tax)"
+                      value={'Pay At The End'}
+                    />
+                    <Picker.Item
+                      label="Partial Payment (Include Tax)"
+                      value={'Partial Payment'}
+                    />
+                  </Picker>
+                </TouchableOpacity>
+                <DateTimePicker
+                  isVisible={showDate}
+                  mode={'date'}
+                  onConfirm={handleDatePicker}
+                  onCancel={() => setShowDate(false)}
                 />
               </View>
               <View style={{padding: 10, marginTop: 20}}>
-                <TouchableOpacity style={style.buttonYellow}>
+                <TouchableOpacity
+                  style={style.buttonYellow}
+                  onPress={() => {
+                    navigation.navigate('Transaction1', dataVehicle);
+                  }}>
                   <Text style={style.buttonText}>Reservation</Text>
                 </TouchableOpacity>
               </View>
@@ -212,7 +204,6 @@ const DetailVehicle = ({navigation, route}) => {
           ) : (
             <></>
           )}
-
           {user.id && user.id === dataVehicle.user_id ? (
             <View style={{padding: 10, marginTop: 20}}>
               <TouchableOpacity style={style.buttonYellow}>

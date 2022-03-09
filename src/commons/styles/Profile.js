@@ -62,5 +62,27 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFCD61',
   },
   buttonText: {fontWeight: 'bold', fontSize: 17, flex: 1},
+  buttonYellow: {
+    backgroundColor: '#FFCD61',
+    padding: 15,
+    borderRadius: 10,
+    marginHorizontal: 15,
+    marginVertical: 10,
+  },
+  textButtonYellow: {
+    color: '#393939',
+    textAlign: 'center',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  loginInfo: {textAlign: 'center', fontSize: 18, marginVertical: 50},
+  headerWrapper: {
+    height: 70,
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  headerText: {fontWeight: 'bold', fontSize: 20},
 });
 export default styles;

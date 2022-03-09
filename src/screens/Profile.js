@@ -26,9 +26,6 @@ const Profile = ({navigation}) => {
     dispatch(logoutAction());
     navigation.replace('Login');
   };
-  if (user.token === '' || !user.token) {
-    navigation.navigate('Login');
-  }
   const getUserInfo = () => {
     const id = user.id;
     getUserDetail(id)
@@ -47,109 +44,125 @@ const Profile = ({navigation}) => {
     getUserInfo();
   }, []);
   return (
-    <ScrollView style={style.viewScroll}>
-      {userInfo !== null ? (
-        <>
-          <View style={style.profileHeader}>
-            <View style={style.imageWrapper}>
-              <Image
-                source={image}
-                onError={({currentTarget}) => {
-                  currentTarget.onerror = null;
-                  setImage(defaultUser);
+    <>
+      {user && user.token && user.token !== '' ? (
+        <ScrollView style={style.viewScroll}>
+          {userInfo !== null ? (
+            <>
+              <View style={style.profileHeader}>
+                <View style={style.imageWrapper}>
+                  <Image
+                    source={image}
+                    onError={({currentTarget}) => {
+                      currentTarget.onerror = null;
+                      setImage(defaultUser);
+                    }}
+                    style={style.userImage}
+                    resizeMethod="resize"
+                    resizeMode="cover"
+                  />
+                </View>
+                <View style={style.nameWrapper}>
+                  <Text style={style.name}>{userInfo.full_name}</Text>
+                  <Text>{userInfo.roles}</Text>
+                </View>
+              </View>
+              <View style={style.menuWrapper}>
+                <View style={style.menuText}>
+                  <Text style={style.menuTextContent}>Your favourite</Text>
+                </View>
+                <View style={style.menuImageWrapper}>
+                  <Image
+                    source={require('../commons/assets/icons/next.png')}
+                    resizeMethod="scale"
+                    resizeMode="cover"
+                    style={style.menuImage}
+                  />
+                </View>
+              </View>
+              <View style={style.menuWrapper}>
+                <View style={style.menuText}>
+                  <Text style={style.menuTextContent}>FAQ</Text>
+                </View>
+                <View style={style.menuImageWrapper}>
+                  <Image
+                    source={require('../commons/assets/icons/next.png')}
+                    resizeMethod="scale"
+                    resizeMode="cover"
+                    style={style.menuImage}
+                  />
+                </View>
+              </View>
+              <View style={style.menuWrapper}>
+                <View style={style.menuText}>
+                  <Text style={style.menuTextContent}>Help</Text>
+                </View>
+                <View style={style.menuImageWrapper}>
+                  <Image
+                    source={require('../commons/assets/icons/next.png')}
+                    resizeMethod="scale"
+                    resizeMode="cover"
+                    style={style.menuImage}
+                  />
+                </View>
+              </View>
+              <TouchableOpacity
+                onPress={() => {
+                  console.log('goto update profile');
+                  console.log(userInfo);
+                  navigation.navigate('UpdateProfile', {userInfo});
+                }}>
+                <View style={style.menuWrapper}>
+                  <View style={style.menuText}>
+                    <Text style={style.menuTextContent}>Update Profile</Text>
+                  </View>
+                  <View style={style.menuImageWrapper}>
+                    <Image
+                      source={require('../commons/assets/icons/next.png')}
+                      resizeMethod="scale"
+                      resizeMode="cover"
+                      style={style.menuImage}
+                    />
+                  </View>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  handleLogout();
                 }}
-                style={style.userImage}
-                resizeMethod="resize"
-                resizeMode="cover"
-              />
+                style={{padding: 15, marginTop: 150}}>
+                <View style={style.buttonLogout}>
+                  <Text style={style.buttonText}>Logout</Text>
+                </View>
+              </TouchableOpacity>
+            </>
+          ) : (
+            <View style={style.marginLoading}>
+              <ActivityIndicator size="large" color="#FFCD61" />
             </View>
-            <View style={style.nameWrapper}>
-              <Text style={style.name}>{userInfo.full_name}</Text>
-            </View>
-          </View>
-          <View style={style.menuWrapper}>
-            <View style={style.menuText}>
-              <Text style={style.menuTextContent}>Your favourite</Text>
-            </View>
-            <View style={style.menuImageWrapper}>
-              <Image
-                source={require('../commons/assets/icons/next.png')}
-                resizeMethod="scale"
-                resizeMode="cover"
-                style={style.menuImage}
-              />
-            </View>
-          </View>
-          <View style={style.menuWrapper}>
-            <View style={style.menuText}>
-              <Text style={style.menuTextContent}>FAQ</Text>
-            </View>
-            <View style={style.menuImageWrapper}>
-              <Image
-                source={require('../commons/assets/icons/next.png')}
-                resizeMethod="scale"
-                resizeMode="cover"
-                style={style.menuImage}
-              />
-            </View>
-          </View>
-          <View style={style.menuWrapper}>
-            <View style={style.menuText}>
-              <Text style={style.menuTextContent}>Help</Text>
-            </View>
-            <View style={style.menuImageWrapper}>
-              <Image
-                source={require('../commons/assets/icons/next.png')}
-                resizeMethod="scale"
-                resizeMode="cover"
-                style={style.menuImage}
-              />
-            </View>
-          </View>
-          <TouchableOpacity
-            onPress={() => {
-              console.log('goto update profile');
-              navigation.navigate('UpdateProfile');
-            }}>
-            <View style={style.menuWrapper}>
-              <View style={style.menuText}>
-                <Text style={style.menuTextContent}>Update Profile</Text>
-              </View>
-              <View style={style.menuImageWrapper}>
-                <Image
-                  source={require('../commons/assets/icons/next.png')}
-                  resizeMethod="scale"
-                  resizeMode="cover"
-                  style={style.menuImage}
-                />
-              </View>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              handleLogout();
-            }}
-            style={{padding: 15, marginTop: 150}}>
-            <View style={style.buttonLogout}>
-              <Text style={style.buttonText}>Logout</Text>
-            </View>
-          </TouchableOpacity>
-        </>
+          )}
+        </ScrollView>
       ) : (
-        <View style={style.marginLoading}>
-          <ActivityIndicator size="large" color="#FFCD61" />
-        </View>
+        <>
+          <ScrollView style={style.viewScroll}>
+            <View style={style.headerWrapper}>
+              <Text style={style.headerText}>Profile</Text>
+            </View>
+            <Text style={style.loginInfo}>
+              You need to login to see Profile
+            </Text>
+            <TouchableOpacity
+              style={style.buttonYellow}
+              onPress={() => {
+                navigation.navigate('Login');
+              }}>
+              <Text style={style.textButtonYellow}>Login</Text>
+            </TouchableOpacity>
+          </ScrollView>
+        </>
       )}
-
-      {/* </View> */}
-    </ScrollView>
+    </>
   );
 };
-// const mapStateToProps = state => {
-//   return {
-//     token: state.auth.userData.token,
-//   };
-// };
 
-// export default connect(mapStateToProps)(Profile);
 export default Profile;

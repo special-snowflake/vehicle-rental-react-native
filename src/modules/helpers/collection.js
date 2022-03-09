@@ -47,3 +47,28 @@ export const addDate = (date, number) => {
 
   return yyyy + '-' + mm + '-' + dd;
 };
+
+export const generatePaymentCode = () => {
+  return Math.floor(100 * 1000 * 1000 + Math.random() * 100 * 1000 * 1000);
+};
+export const generateBookingCode = (vehicleName = 'VHC') => {
+  const randomNumber = Math.floor(100 * 1000 + Math.random() * 100 * 1000);
+  const vocal = ['a', 'i', 'u', 'e', 'o'];
+  let codeStart = vehicleName[0];
+  for (let i = 1; i < vehicleName.length; i++) {
+    let isVocal = false;
+    const str = vehicleName[i];
+    vocal.forEach(element => {
+      if (element === str.toLowerCase()) {
+        isVocal = true;
+      }
+    });
+    if (!isVocal) {
+      codeStart += str.toUpperCase();
+    }
+    if (codeStart.length === 3) {
+      break;
+    }
+  }
+  return codeStart + randomNumber;
+};

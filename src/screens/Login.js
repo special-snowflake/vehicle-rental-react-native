@@ -88,6 +88,15 @@ const Login = props => {
                 </Text>
               </Text>
             </View>
+            <View style={{marginVertical: 30}}>
+              <Text
+                style={styles.signupWrapper}
+                onPress={() => {
+                  navigation.navigate('StackTab');
+                }}>
+                Back to Home
+              </Text>
+            </View>
           </View>
         </View>
       </ImageBackground>
@@ -101,5 +110,4 @@ const mapStateToProps = state => {
   };
 };
 
-// export default Login;
 export default connect(mapStateToProps)(Login);

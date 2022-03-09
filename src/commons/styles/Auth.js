@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     height: height,
   },
   inputWrapper: {
-    marginTop: 200,
+    marginTop: 170,
     marginHorizontal: 5,
   },
   inputForm: {

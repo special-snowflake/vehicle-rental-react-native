@@ -16,10 +16,10 @@ const styles = StyleSheet.create({
     width: width,
     margin: 0,
     padding: 0,
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: {width: 0, height: 2}, //ios
     shadowColor: 'black',
     shadowOpacity: 0.3,
-    elevation: 5,
+    elevation: 5, //android
   },
   jumboTron: {
     padding: 0,
@@ -58,10 +58,13 @@ const styles = StyleSheet.create({
   },
   counterButton: {
     backgroundColor: '#FFCD61',
-    width: 20,
-    height: 20,
+    width: 30,
+    height: 30,
     padding: 0,
-    borderRadius: 20 / 2,
+    borderRadius: 30 / 2,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   itemLeft: {
     flex: 2,
@@ -71,15 +74,18 @@ const styles = StyleSheet.create({
   itemRight: {
     flex: 1,
     textAlign: 'right',
-    // backgroundColor: 'lightgrey',
     position: 'relative',
     height: 40,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignContent: 'flex-end',
   },
   textSelect: {
     fontWeight: 'bold',
-    fontSize: 15,
+    fontSize: 16,
   },
-  textCenter: {textAlign: 'center'},
+  textCenter: {textAlign: 'center', fontSize: 16, fontWeight: 'bold'},
   contentHeader: {
     fontSize: 22,
     color: 'black',
@@ -91,5 +97,28 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   buttonText: {textAlign: 'center', fontWeight: 'bold', fontSize: 18},
+  wrapperPicker: {
+    marginTop: 10,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  pickerLeft: {
+    padding: 12,
+    marginHorizontal: 10,
+    backgroundColor: 'rgba(57, 57, 57, 0.3)',
+    borderRadius: 7,
+    width: 200,
+    height: 55,
+    justifyContent: 'center',
+  },
+  pickerRight: {
+    marginHorizontal: 10,
+    backgroundColor: 'rgba(57, 57, 57, 0.3)',
+    borderRadius: 7,
+    width: 155,
+    height: 55,
+    justifyContent: 'center',
+  },
 });
 export default styles;

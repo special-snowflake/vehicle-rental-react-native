@@ -1,30 +1,33 @@
-import {View, Text, Image} from 'react-native';
-import React, {useState} from 'react';
 import {
+  View,
+  Text,
+  Image,
   ScrollView,
   TextInput,
   TouchableOpacity,
-} from 'react-native-gesture-handler';
+} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import {RadioButton} from 'react-native-paper';
 import DocumentPicker from 'react-native-document-picker';
-import NativeUploady, {UploadyContext} from '@rpldy/native-uploady';
 const defaultImage = require('../commons/assets/images/defaultBig.jpg');
-// import NativeUploady, {
-//   UploadyContext,
-//   useItemFinishListener,
-//   useItemStartListener,
-//   useItemErrorListener,
-// } from '@rpldy/native-uploady';
 
 import style from '../commons/styles/UpdateProfile';
 import {useSelector} from 'react-redux';
 import {updateUser} from '../modules/utils/user';
+import DateTimePicker from 'react-native-modal-datetime-picker';
 
-const UpdateProfile = () => {
+const UpdateProfile = ({navigation, route: {params}}) => {
+  const [userInfo, setUserInfo] = useState(params.userInfo);
   const [image, setImage] = useState(defaultImage);
   const [selectedImage, setSelectedImage] = useState(null);
   const [checked, setChecked] = useState(null);
+  const [showDate, setShowDate] = useState(false);
+
   const user = useSelector(state => state.auth.userData);
+
+  useEffect(() => {
+    console.log('ui', userInfo);
+  });
   const uploadImage = () => {
     console.log('edit image');
     const res = DocumentPicker.pick({
@@ -40,6 +43,11 @@ const UpdateProfile = () => {
       .catch(err => {
         console.log(err);
       });
+  };
+
+  const handleDatePicker = date => {
+    console.log('A date has been picked: ', date);
+    setShowDate(false);
   };
 
   const handleSaveChanges = () => {
@@ -115,12 +123,39 @@ const UpdateProfile = () => {
         placeholder="Enter Your Email Address"
         placeholderTextColor="#DADADA"
       />
+      <Text>Phone Number:</Text>
+      <TextInput
+        style={style.inputField}
+        placeholder="Enter Your Phone Number"
+        placeholderTextColor="#DADADA"
+      />
+      <Text>Date of Birth:</Text>
+      <TouchableOpacity
+        style={style.inputField}
+        onPress={() => {
+          setShowDate(true);
+        }}>
+        <Text style={{paddingVertical: 5}}>Something</Text>
+      </TouchableOpacity>
+      <DateTimePicker
+        isVisible={showDate}
+        mode={'date'}
+        onConfirm={handleDatePicker}
+        onCancel={() => setShowDate(false)}
+      />
       <TouchableOpacity
         style={style.buttonSave}
         onPress={() => {
           handleSaveChanges();
         }}>
         <Text style={style.textButton}>Save Change</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={style.buttonBlack}
+        onPress={() => {
+          // handleSaveChanges();
+        }}>
+        <Text style={style.textButtonBlack}>Change Password</Text>
       </TouchableOpacity>
     </ScrollView>
   );

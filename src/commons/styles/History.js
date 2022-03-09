@@ -47,13 +47,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingRight: 10,
   },
+  textLeft: {textAlign: 'center', fontSize: 16},
   textRight: {
     textAlign: 'right',
+    fontSize: 16,
   },
   pageWrapper: {
     marginTop: 10,
     marginBottom: 20,
     flexDirection: 'row',
+    justifyContent: 'center',
     flexWrap: 'wrap',
     alignItems: 'center',
   },
@@ -66,5 +69,19 @@ const styles = StyleSheet.create({
     paddingTop: 5,
   },
   paginationButton: {textAlign: 'center', textAlignVertical: 'center'},
+  buttonYellow: {
+    backgroundColor: '#FFCD61',
+    padding: 15,
+    borderRadius: 10,
+    marginHorizontal: 15,
+    marginVertical: 10,
+  },
+  textButtonYellow: {
+    color: '#393939',
+    textAlign: 'center',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  loginInfo: {textAlign: 'center', fontSize: 18, marginVertical: 50},
 });
 export default styles;
