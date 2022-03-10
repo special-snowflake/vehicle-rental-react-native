@@ -13,16 +13,19 @@ const defaultImage = require('../commons/assets/images/defaultBig.jpg');
 
 import style from '../commons/styles/UpdateProfile';
 import {useSelector} from 'react-redux';
-import {updateUser} from '../modules/utils/user';
+import {updateUsingFetch} from '../modules/utils/user';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 
 const UpdateProfile = ({navigation, route: {params}}) => {
+  const [name, setName] = useState(null);
+  const [email, setEmail] = useState(null);
+  const [phone, setPhone] = useState(null);
   const [userInfo, setUserInfo] = useState(params.userInfo);
   const [image, setImage] = useState(defaultImage);
   const [selectedImage, setSelectedImage] = useState(null);
   const [checked, setChecked] = useState(null);
   const [showDate, setShowDate] = useState(false);
-
+  const [selectedDoB, setSelectedDoB] = useState(false);
   const user = useSelector(state => state.auth.userData);
 
   useEffect(() => {
@@ -45,32 +48,45 @@ const UpdateProfile = ({navigation, route: {params}}) => {
       });
   };
 
+  useEffect(() => {
+    const host = process.env.URL_API + '/user';
+    if (userInfo && userInfo.photo && userInfo.photo !== null) {
+      console.log('photo', host.concat(userInfo.photo));
+      setImage({uri: host.concat(userInfo.photo)});
+    }
+  }, [userInfo]);
+
   const handleDatePicker = date => {
     console.log('A date has been picked: ', date);
+    const n = date.slice(0, 9);
+    console.log('A date : ', n);
+    // setSelectedDoB(date.slice(0,));
     setShowDate(false);
   };
 
   const handleSaveChanges = () => {
     const body = new FormData();
-    const imagetmp = selectedImage['uri'];
-    const newUri = imagetmp.slice(10);
-    console.log(selectedImage.uri);
-    body.append('profilePicture', {
-      uri: selectedImage.uri,
-      type: selectedImage.type,
-      name: selectedImage.name,
-    });
-    // body.append('sex', 'M');
-    // body.append('gender', 'M');
-    body.append('full_name', 'Uchiha Haspi');
-    console.log(body, user.token);
-    updateUser(body, user.token)
-      .then(res => {
-        console.log(res);
-      })
-      .catch(err => {
-        console.log(err.response);
+    // console.log(selectedImage.uri);
+    console.log('selected', selectedImage);
+    if (selectedImage !== null) {
+      body.append('profilePicture', {
+        uri: selectedImage.uri,
+        type: selectedImage.type,
+        name: selectedImage.name,
       });
+    }
+    if (name) body.append('full_name', name);
+    body.append('sex', 'M');
+    if (phone) body.append('phone', phone);
+    if (email) body.append('phone', email);
+    console.log('body', body);
+    updateUsingFetch(body, user.token)
+      .then(res => {
+        return console.log('success', res);
+      })
+      .catch(e => console.log('error', e))
+      .done();
+    console.log(body, user.token);
   };
   return (
     <ScrollView style={style.viewScroll}>
@@ -80,6 +96,11 @@ const UpdateProfile = ({navigation, route: {params}}) => {
             source={image}
             resizeMode="cover"
             resizeMethod="resize"
+            onError={({currentTarget}) => {
+              console.log('onError', image);
+              currentTarget.onerror = null;
+              setImage(defaultImage);
+            }}
             style={style.userImg}
           />
           <View style={style.buttonWrapper}>
@@ -100,13 +121,13 @@ const UpdateProfile = ({navigation, route: {params}}) => {
       <View style={style.radioWrapper}>
         <RadioButton
           value="f"
-          status={checked === 'f' ? 'checked' : 'unchecked'}
+          status={userInfo.sex.toLowerCase() === 'f' ? 'checked' : 'unchecked'}
           onPress={() => setChecked('f')}
         />
         <Text style={style.radioF}>Female</Text>
         <RadioButton
           value="m"
-          status={checked === 'm' ? 'checked' : 'unchecked'}
+          status={userInfo.sex.toLowerCase() === 'm' ? 'checked' : 'unchecked'}
           onPress={() => setChecked('m')}
         />
         <Text>Male</Text>
@@ -115,19 +136,31 @@ const UpdateProfile = ({navigation, route: {params}}) => {
       <TextInput
         style={style.inputField}
         placeholder="Enter Your Name"
+        defaultValue={userInfo.full_name}
         placeholderTextColor="#DADADA"
+        onChange={text => {
+          setName(text.nativeEvent.text);
+        }}
       />
       <Text>Email Address:</Text>
       <TextInput
         style={style.inputField}
         placeholder="Enter Your Email Address"
+        defaultValue={userInfo.email}
         placeholderTextColor="#DADADA"
+        onChange={text => {
+          setEmail(text.nativeEvent.text);
+        }}
       />
       <Text>Phone Number:</Text>
       <TextInput
         style={style.inputField}
+        defaultValue={userInfo.phone}
         placeholder="Enter Your Phone Number"
         placeholderTextColor="#DADADA"
+        onChange={text => {
+          setPhone(text.nativeEvent.text);
+        }}
       />
       <Text>Date of Birth:</Text>
       <TouchableOpacity
@@ -135,7 +168,9 @@ const UpdateProfile = ({navigation, route: {params}}) => {
         onPress={() => {
           setShowDate(true);
         }}>
-        <Text style={{paddingVertical: 5}}>Something</Text>
+        <Text style={{paddingVertical: 5}}>
+          {userInfo.dob ? userInfo.dob.slice(0, 10) : 'Select DOB'}
+        </Text>
       </TouchableOpacity>
       <DateTimePicker
         isVisible={showDate}

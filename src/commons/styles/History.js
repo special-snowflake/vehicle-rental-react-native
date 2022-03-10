@@ -1,6 +1,6 @@
-import {Dimensions, StyleSheet} from 'react-native';
-const width = Dimensions.get('window').width;
-const height = Dimensions.get('window').height;
+import {StyleSheet} from 'react-native';
+// const width = Dimensions.get('window').width;
+// const height = Dimensions.get('window').height;
 const styles = StyleSheet.create({
   viewScroll: {backgroundColor: 'white', padding: 15},
   headerWrapper: {

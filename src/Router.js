@@ -19,6 +19,7 @@ import SearchVehicle from './screens/SearchVehicle';
 import Transaction1 from './screens/Transaction1';
 import Transaction2 from './screens/Transaction2';
 import Transaction3 from './screens/Transaction3';
+import AddVehicle from './screens/AddVehicle';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -46,6 +47,11 @@ const HomeTab = () => {
       />
       <Stack.Screen name="DetailVehicle" component={DetailVehicle} />
       <Stack.Screen name="SearchVehicle" component={SearchVehicle} />
+      <Stack.Screen
+        name="AddVehicle"
+        component={AddVehicle}
+        options={{headerShown: true, title: 'Add new item'}}
+      />
       <Stack.Screen
         options={{headerShown: true}}
         name="VehicleCategory"

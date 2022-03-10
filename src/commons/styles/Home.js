@@ -1,6 +1,6 @@
 import {Dimensions, StyleSheet} from 'react-native';
 const width = Dimensions.get('window').width;
-const height = Dimensions.get('window').height;
+// const height = Dimensions.get('window').height;
 const styles = StyleSheet.create({
   marginLoading: {
     marginTop: 50,

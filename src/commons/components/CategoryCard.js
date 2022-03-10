@@ -1,8 +1,8 @@
-import {View, Text, Image} from 'react-native';
+import {View, Text, Image, TouchableOpacity} from 'react-native';
 import React from 'react';
 import style from '../styles/CategoryCard';
 import {numberToRupiah} from '../../modules/helpers/collection';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+// import {} from 'react-native-gesture-handler';
 
 const imagehost = process.env.URL_API + '/vehicles';
 

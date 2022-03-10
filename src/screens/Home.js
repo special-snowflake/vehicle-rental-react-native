@@ -5,14 +5,12 @@ import {
   ScrollView,
   ImageBackground,
   TouchableOpacity,
-  ToastAndroid,
   TextInput,
   Image,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 
 import styles from '../commons/styles/Home';
-// import {TextInput} from 'react-native-gesture-handler';
 import {searchVehicle} from '../modules/utils/vehicles';
 import axios from 'axios';
 import {useSelector} from 'react-redux';
@@ -77,7 +75,6 @@ const Home = ({navigation}) => {
           <Image
             source={require('../commons/assets/icons/search.png')}
             style={{width: 25, height: 25}}
-            // style={styles.searchLogo}
           />
         </TouchableOpacity>
         {user.roles && user.roles === 'owner' ? (
@@ -85,10 +82,12 @@ const Home = ({navigation}) => {
             style={styles.addNewItem}
             onPress={() => {
               console.log('go to AddNewItem');
-              // navigation.navigate('AddNewItem');
             }}>
             <Text
-              style={{fontSize: 18, fontWeight: 'bold', textAlign: 'center'}}>
+              style={{fontSize: 18, fontWeight: 'bold', textAlign: 'center'}}
+              onPress={() => {
+                navigation.navigate('AddVehicle');
+              }}>
               Add new item
             </Text>
           </TouchableOpacity>

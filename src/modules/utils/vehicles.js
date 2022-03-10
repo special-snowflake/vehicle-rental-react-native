@@ -11,6 +11,17 @@ export const addVehicle = (body, token) => {
   return axios.post(url, body, config);
 };
 
+export const addVehicleFetch = (body, token) => {
+  return fetch(URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      'x-authorized-token': token,
+    },
+    body: body,
+  }).then(res => console.log(res));
+};
+
 export const getVehicleDetail = id => {
   const detailUrl = url + `/detail/${id}`;
   console.log(detailUrl);

@@ -51,6 +51,7 @@ export const addDate = (date, number) => {
 export const generatePaymentCode = () => {
   return Math.floor(100 * 1000 * 1000 + Math.random() * 100 * 1000 * 1000);
 };
+
 export const generateBookingCode = (vehicleName = 'VHC') => {
   const randomNumber = Math.floor(100 * 1000 + Math.random() * 100 * 1000);
   const vocal = ['a', 'i', 'u', 'e', 'o'];
@@ -71,4 +72,8 @@ export const generateBookingCode = (vehicleName = 'VHC') => {
     }
   }
   return codeStart + randomNumber;
+};
+
+export const capitalizeFirstLetter = str => {
+  return str[0].toUpperCase() + str.slice(1);
 };

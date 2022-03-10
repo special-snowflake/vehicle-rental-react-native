@@ -5,11 +5,11 @@ import {
   ActivityIndicator,
   ImageBackground,
   Image,
+  TouchableOpacity,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import style from '../commons/styles/DetailVehicle';
 import {getVehicleDetail} from '../modules/utils/vehicles';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import {numberToRupiah} from '../modules/helpers/collection';
 import {useSelector} from 'react-redux';
 const defaultCar = require('../commons/assets/images/car-default.jpg');

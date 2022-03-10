@@ -4,11 +4,13 @@ import {
   Image,
   TouchableOpacity,
   ActivityIndicator,
+  ScrollView,
+  TextInput,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {serialize} from '../modules/helpers/serialize';
 import {searchVehicle} from '../modules/utils/vehicles';
-import {ScrollView, TextInput} from 'react-native-gesture-handler';
+// import {ScrollView, TextInput} from 'react-native-gesture-handler';
 import CategoryCard from '../commons/components/CategoryCard';
 import styles from '../commons/styles/SearchVehicle';
 

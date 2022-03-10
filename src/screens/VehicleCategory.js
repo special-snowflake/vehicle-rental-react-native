@@ -1,6 +1,12 @@
-import {ActivityIndicator, View, Text, ScrollView, Image} from 'react-native';
+import {
+  ActivityIndicator,
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+// import {TouchableOpacity} from 'react-native-gesture-handler';
 import style from '../commons/styles/VehicleCategory';
 import {searchVehicle} from '../modules/utils/vehicles';
 import CategoryCard from '../commons/components/CategoryCard';

@@ -4,11 +4,12 @@ import {
   TextInput,
   ScrollView,
   ImageBackground,
-  KeyboardAvoidingView,
+  TouchableOpacity,
+  // KeyboardAvoidingView,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import styles from '../commons/styles/Auth';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+// import {TouchableOpacity} from 'react-native-gesture-handler';
 import {connect, useDispatch} from 'react-redux';
 import {loginAction} from '../redux/actions/auth';
 import {} from 'react-native-toast-message';

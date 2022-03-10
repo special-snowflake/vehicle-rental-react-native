@@ -1,6 +1,13 @@
-import {View, Text, Image, ActivityIndicator} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  ActivityIndicator,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
+// import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {logoutAction} from '../redux/actions/auth';
@@ -8,9 +15,10 @@ import {logout} from '../modules/utils/auth';
 
 import style from '../commons/styles/Profile';
 import {getUserDetail} from '../modules/utils/user';
+import {capitalizeFirstLetter} from '../modules/helpers/collection';
 
 const defaultUser = require('../commons/assets/images/defaultSmall.jpg');
-const imagehost = process.env.URL_API + '/users';
+const imagehost = process.env.URL_API + '/user';
 
 const Profile = ({navigation}) => {
   const user = useSelector(state => state.auth.userData);
@@ -55,6 +63,7 @@ const Profile = ({navigation}) => {
                     source={image}
                     onError={({currentTarget}) => {
                       currentTarget.onerror = null;
+                      console.log(image);
                       setImage(defaultUser);
                     }}
                     style={style.userImage}
@@ -64,7 +73,7 @@ const Profile = ({navigation}) => {
                 </View>
                 <View style={style.nameWrapper}>
                   <Text style={style.name}>{userInfo.full_name}</Text>
-                  <Text>{userInfo.roles}</Text>
+                  <Text>{capitalizeFirstLetter(user.roles)}</Text>
                 </View>
               </View>
               <View style={style.menuWrapper}>

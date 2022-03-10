@@ -1,15 +1,15 @@
-import {View, Text, Image} from 'react-native';
+import {View, Text, ScrollView, TouchableOpacity} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
+// import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {searchHistory} from '../modules/utils/history';
 import {useSelector} from 'react-redux';
 import {ActivityIndicator} from 'react-native-paper';
 import styles from '../commons/styles/History';
-import {numberToRupiah} from '../modules/helpers/collection';
+// import {numberToRupiah} from '../modules/helpers/collection';
 import CardHistory from '../commons/components/CardHistory';
-import {NavigationContainer} from '@react-navigation/native';
-const defaultVehicle = require('../commons/assets/images/car-default.jpg');
-const imghost = process.env.URL_API + '/vehicles';
+// import {NavigationContainer} from '@react-navigation/native';
+// const defaultVehicle = require('../commons/assets/images/car-default.jpg');
+// const imghost = process.env.URL_API + '/vehicles';
 const History = ({navigation}) => {
   const user = useSelector(state => state.auth.userData);
   const [meta, setMeta] = useState(null);
@@ -19,21 +19,7 @@ const History = ({navigation}) => {
     page: 1,
   });
   const [history, setHistory] = useState([]);
-  const getHistory = () => {
-    const token = user.token;
-    console.log(token);
-    const newFilter = `?keyword=&page=${filter.page}`;
-    searchHistory(newFilter, token)
-      .then(res => {
-        console.log(res.data.data, res['data']['data'].length);
-        setHistory(res.data.data);
-        setMeta(res.data.meta);
-        setIsLoading(false);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  };
+
   const showPagination = () => {
     const elements = [];
     console.log('pagination meta', meta);
@@ -64,9 +50,24 @@ const History = ({navigation}) => {
   // }, []);
 
   useEffect(() => {
+    const getHistory = () => {
+      const token = user.token;
+      console.log(token);
+      const newFilter = `?keyword=&page=${filter.page}`;
+      searchHistory(newFilter, token)
+        .then(res => {
+          console.log(res.data.data, res.data.data.length);
+          setHistory(res.data.data);
+          setMeta(res.data.meta);
+          setIsLoading(false);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    };
     setIsLoading(true);
     getHistory();
-  }, [filter.page]);
+  }, [filter.page, user.token]);
 
   return (
     <>

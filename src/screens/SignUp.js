@@ -4,19 +4,20 @@ import {
   TextInput,
   ScrollView,
   ImageBackground,
-  KeyboardAvoidingView,
+  // KeyboardAvoidingView,
+  TouchableOpacity,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import styles from '../commons/styles/Auth';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import {connect, useDispatch} from 'react-redux';
+// import {TouchableOpacity} from 'react-native-gesture-handler';
+// import {useDispatch} from 'react-redux';
 import {register} from '../modules/utils/auth';
 
 const SignUp = ({navigation}) => {
   const [email, setEmail] = useState(null);
   const [name, setName] = useState(null);
   const [password, setPassword] = useState(null);
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   // const navigation = props.navigation;
   const handleSignup = () => {
     const body = {
