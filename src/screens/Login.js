@@ -9,14 +9,13 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import styles from '../commons/styles/Auth';
-// import {TouchableOpacity} from 'react-native-gesture-handler';
 import {connect, useDispatch} from 'react-redux';
 import {loginAction} from '../redux/actions/auth';
-import {} from 'react-native-toast-message';
 
 const Login = props => {
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
+  const [isFetching, setIsFetching] = useState(false);
   const dispatch = useDispatch();
   const navigation = props.navigation;
   const handleLogin = () => {
@@ -30,20 +29,16 @@ const Login = props => {
 
   useEffect(() => {
     if (props.auth.isFulfilled === true) {
-      // Toast.show({
-      //   type: 'success',
-      //   text1: 'Login Success 👋',
-      // });
-      // return navigate('/', {replace: true});
+      setIsFetching(true);
       navigation.navigate('StackTab');
       console.log('login success');
     }
     if (props.auth.isRejected === true) {
-      // Toast.show({
-      //   type: 'error',
-      //   text1: 'Login Failed 😥',
-      // });
+      setIsFetching(false);
       console.log('login failed');
+    }
+    if (props.auth.isPending === true) {
+      setIsFetching(true);
     }
   }, [props.auth, navigation]);
 

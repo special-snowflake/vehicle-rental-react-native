@@ -20,6 +20,8 @@ import Transaction1 from './screens/Transaction1';
 import Transaction2 from './screens/Transaction2';
 import Transaction3 from './screens/Transaction3';
 import AddVehicle from './screens/AddVehicle';
+import ChangePassword from './screens/ChangePassword';
+import SearchFilter from './screens/SearchFilter';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -47,6 +49,11 @@ const HomeTab = () => {
       />
       <Stack.Screen name="DetailVehicle" component={DetailVehicle} />
       <Stack.Screen name="SearchVehicle" component={SearchVehicle} />
+      <Stack.Screen
+        name="SearchFilter"
+        component={SearchFilter}
+        options={{headerShown: true, title: 'Filter'}}
+      />
       <Stack.Screen
         name="AddVehicle"
         component={AddVehicle}
@@ -96,6 +103,11 @@ const ProfileTab = () => {
         name="UpdateProfile"
         component={UpdateProfile}
         options={{title: 'Update Profile', headerShown: true}}
+      />
+      <Stack.Screen
+        name="ChangePassword"
+        component={ChangePassword}
+        options={{title: 'Change Password', headerShown: true}}
       />
     </Stack.Navigator>
   );

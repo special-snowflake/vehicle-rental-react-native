@@ -1,5 +1,5 @@
 import {Dimensions, StyleSheet} from 'react-native';
-const width = Dimensions.get('window').width;
+// const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 const styles = StyleSheet.create({
   viewScroll: {
@@ -84,5 +84,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headerText: {fontWeight: 'bold', fontSize: 20},
+  buttonSpacing: {padding: 15, marginTop: 120},
 });
 export default styles;

@@ -77,3 +77,13 @@ export const generateBookingCode = (vehicleName = 'VHC') => {
 export const capitalizeFirstLetter = str => {
   return str[0].toUpperCase() + str.slice(1);
 };
+
+export const grabLocalYMD = iso8601 => {
+  const date = new Date(iso8601);
+  const year = date.getFullYear();
+  let month = date.getMonth() + 1;
+  let dt = date.getDate();
+  dt = dt < 10 ? '0' + dt : dt;
+  month = month < 10 ? '0' + month : month;
+  return year + '-' + month + '-' + dt;
+};

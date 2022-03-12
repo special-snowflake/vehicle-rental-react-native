@@ -11,15 +11,17 @@ export const addVehicle = (body, token) => {
   return axios.post(url, body, config);
 };
 
-export const addVehicleFetch = (body, token) => {
-  return fetch(URL, {
+export const addVehicleFetch = async (body, token) => {
+  console.log('fetch body, token, url', body, token, url);
+  const res = await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'multipart/form-data',
       'x-authorized-token': token,
     },
     body: body,
-  }).then(res => console.log(res));
+  });
+  return res;
 };
 
 export const getVehicleDetail = id => {
@@ -41,6 +43,7 @@ export const updateVehicles = (id, body, token) => {
 
 export const searchVehicle = filter => {
   const urlSearch = url + '/search' + filter;
+  console.log('url search', urlSearch);
   return axios.get(urlSearch);
 };
 

@@ -45,10 +45,6 @@ const History = ({navigation}) => {
     return elements;
   };
 
-  // useEffect(() => {
-  //   getHistory();
-  // }, []);
-
   useEffect(() => {
     const getHistory = () => {
       const token = user.token;

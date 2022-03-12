@@ -130,9 +130,19 @@ const AddVehicle = ({navigation}) => {
     addVehicleFetch(body, user.token)
       .then(res => {
         setIsFetching(false);
-        return console.log('success', res);
+        console.log('success', res);
+        if (res.ok) {
+          return res.json();
+        }
       })
-      .catch(e => console.log('error', e))
+      .then(response => {
+        console.log('hasil akhir', response);
+        navigation.navigate('DetailVehicle', response.data.id);
+      })
+      .catch(e => {
+        setIsFetching(false);
+        console.log('error', e);
+      })
       .done();
     console.log(
       name,
@@ -224,7 +234,7 @@ const AddVehicle = ({navigation}) => {
           </View>
           <Text style={styles.label}>Description:</Text>
           <TextInput
-            placeholder="Type product price"
+            placeholder="Type Product Description Max 150 characters"
             style={{...styles.inputCenter, ...styles.inputTextLeft}}
             onChange={text => {
               setDescription(text.nativeEvent.text);

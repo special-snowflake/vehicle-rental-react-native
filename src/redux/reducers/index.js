@@ -1,10 +1,12 @@
 import {combineReducers} from 'redux';
 import authReducer from './auth';
+import filterReducer from './filter';
 import {ACTION_STRING} from '../actions/actionString';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const appReducer = combineReducers({
   auth: authReducer,
+  filter: filterReducer,
 });
 
 // remove persist when logout

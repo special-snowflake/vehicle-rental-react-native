@@ -5,15 +5,16 @@ import {
   ActivityIndicator,
   ScrollView,
   TouchableOpacity,
+  Modal,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-// import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {logoutAction} from '../redux/actions/auth';
 import {logout} from '../modules/utils/auth';
 
 import style from '../commons/styles/Profile';
+import modalStyle from '../commons/styles/Modals';
 import {getUserDetail} from '../modules/utils/user';
 import {capitalizeFirstLetter} from '../modules/helpers/collection';
 
@@ -22,6 +23,7 @@ const imagehost = process.env.URL_API + '/user';
 
 const Profile = ({navigation}) => {
   const user = useSelector(state => state.auth.userData);
+  const [showModal, setShowModal] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
   const [image, setImage] = useState(defaultUser);
 
@@ -45,6 +47,7 @@ const Profile = ({navigation}) => {
         setImage({uri: newImage});
       })
       .catch(err => {
+        console.log(err);
         console.log(err.response);
       });
   };
@@ -117,6 +120,24 @@ const Profile = ({navigation}) => {
               </View>
               <TouchableOpacity
                 onPress={() => {
+                  navigation.navigate('ChangePassword');
+                }}>
+                <View style={style.menuWrapper}>
+                  <View style={style.menuText}>
+                    <Text style={style.menuTextContent}>Change Password</Text>
+                  </View>
+                  <View style={style.menuImageWrapper}>
+                    <Image
+                      source={require('../commons/assets/icons/next.png')}
+                      resizeMethod="scale"
+                      resizeMode="cover"
+                      style={style.menuImage}
+                    />
+                  </View>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
                   console.log('goto update profile');
                   console.log(userInfo);
                   navigation.navigate('UpdateProfile', {userInfo});
@@ -137,9 +158,9 @@ const Profile = ({navigation}) => {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
-                  handleLogout();
+                  setShowModal(true);
                 }}
-                style={{padding: 15, marginTop: 150}}>
+                style={style.buttonSpacing}>
                 <View style={style.buttonLogout}>
                   <Text style={style.buttonText}>Logout</Text>
                 </View>
@@ -148,6 +169,15 @@ const Profile = ({navigation}) => {
           ) : (
             <View style={style.marginLoading}>
               <ActivityIndicator size="large" color="#FFCD61" />
+              <TouchableOpacity
+                onPress={() => {
+                  setShowModal(true);
+                }}
+                style={style.buttonSpacing}>
+                <View style={style.buttonLogout}>
+                  <Text style={style.buttonText}>Logout</Text>
+                </View>
+              </TouchableOpacity>
             </View>
           )}
         </ScrollView>
@@ -170,6 +200,46 @@ const Profile = ({navigation}) => {
           </ScrollView>
         </>
       )}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={showModal}
+        onRequestClose={() => {
+          console.log('Modal has been closed.');
+          setShowModal(false);
+        }}>
+        <TouchableOpacity
+          onPress={() => {
+            setShowModal(false);
+          }}
+          style={modalStyle.modalTouchableLayout}>
+          <View style={modalStyle.modalCoverMiddle}>
+            <View style={modalStyle.modalContentMiddle}>
+              <Text style={modalStyle.textMiddleHeader}>
+                Are You Sure You Want To Logout?
+              </Text>
+              <View style={modalStyle.buttonMiddleWrapper}>
+                <TouchableOpacity
+                  style={modalStyle.btnYellowSm}
+                  onPress={() => {
+                    setShowModal(false);
+                    console.log('log me out');
+                    handleLogout();
+                  }}>
+                  <Text style={modalStyle.textBtnYellow}>Logout</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={modalStyle.buttonPrimarySm}
+                  onPress={() => {
+                    setShowModal(false);
+                  }}>
+                  <Text style={modalStyle.textBtnPrimary}>Cancel</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </TouchableOpacity>
+      </Modal>
     </>
   );
 };

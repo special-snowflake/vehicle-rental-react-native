@@ -1,10 +1,21 @@
 import {View, Text, ScrollView, Image, TouchableOpacity} from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 import styles from '../commons/styles/Transaction';
 import {numberToRupiah} from '../modules/helpers/collection';
+const defaultImage = require('../commons/assets/images/car-default.jpg');
+const Transaction2 = ({navigation, route}) => {
+  const {params} = route;
+  const [image, setImage] = useState(defaultImage);
+  const totalPrice = params.dataVehicle.price * params.day;
+  const imghost = process.env.URL_API + '/vehicles';
 
-const Transaction2 = ({navigation}) => {
+  useEffect(() => {
+    if (params.dataVehicle.images.length > 0) {
+      const img = {uri: imghost + params.dataVehicle.images[0]};
+      setImage(img);
+    }
+  }, [params, setImage, imghost]);
   return (
     <ScrollView style={styles.scrollView}>
       <View style={styles.pageWrapper}>
@@ -21,18 +32,24 @@ const Transaction2 = ({navigation}) => {
       <View style={styles.imgWrapper}>
         <Image
           style={styles.transactionImage}
-          source={require('../commons/assets/images/car-default.jpg')}
+          source={image}
+          onError={({currentTarget}) => {
+            currentTarget.onerror = null;
+            setImage(defaultImage);
+          }}
         />
       </View>
-      <View
-        style={{
-          paddingHorizontal: 15,
-          paddingVertical: 20,
-        }}>
-        <Text style={styles.textInfo}>2 Vespa</Text>
-        <Text style={styles.textInfo}>Prepayment (no tax)</Text>
-        <Text style={styles.textInfo}>4 days</Text>
-        <Text style={styles.textInfo}>Jan 18 2021</Text>
+      <View style={styles.info2Wrapper}>
+        <Text style={styles.textInfo}>
+          {params.counter} {params.dataVehicle.name}
+        </Text>
+        <Text style={styles.textInfo}>{params.paymentMethod}</Text>
+        <Text style={styles.textInfo}>
+          {params.day} {params.day !== '1' ? 'days' : 'day'}
+        </Text>
+        <Text style={styles.textInfo}>
+          {params.startDate.slice(4, 15)} to {params.endDate.slice(4, 15)}
+        </Text>
         <View
           style={{
             marginTop: 20,
@@ -42,13 +59,17 @@ const Transaction2 = ({navigation}) => {
       </View>
       <View style={{paddingHorizontal: 15, marginBottom: 20}}>
         <Text style={{fontSize: 22, fontWeight: 'bold'}}>
-          Rp. {numberToRupiah(250000)}
+          Rp. {numberToRupiah(totalPrice)}
         </Text>
       </View>
       <TouchableOpacity
         style={styles.buttonYellow}
         onPress={() => {
-          navigation.navigate('Transaction3');
+          const newParams = {
+            ...params,
+            totalPrice,
+          };
+          navigation.navigate('Transaction3', newParams);
         }}>
         <Text style={styles.textButtonYellow}>Get Payment Code</Text>
       </TouchableOpacity>

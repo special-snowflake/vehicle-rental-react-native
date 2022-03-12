@@ -75,10 +75,16 @@ const UpdateProfile = ({navigation, route: {params}}) => {
         name: selectedImage.name,
       });
     }
-    if (name) body.append('full_name', name);
+    if (name) {
+      body.append('full_name', name);
+    }
     body.append('sex', 'M');
-    if (phone) body.append('phone', phone);
-    if (email) body.append('phone', email);
+    if (phone) {
+      body.append('phone', phone);
+    }
+    if (email) {
+      body.append('phone', email);
+    }
     console.log('body', body);
     updateUsingFetch(body, user.token)
       .then(res => {

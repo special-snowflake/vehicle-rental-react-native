@@ -11,18 +11,20 @@ export const updateUser = (body, token) => {
   });
 };
 
-export const updateUsingFetch = (body, token) => {
-  return fetch(URL, {
+export const updateUsingFetch = async (body, token) => {
+  const res = await fetch(URL, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'multipart/form-data',
       'x-authorized-token': token,
     },
     body: body,
-  }).then(res => console.log(res));
+  });
+  return res;
 };
 
 export const getUserDetail = id => {
   const urlGet = URL + '/detail/' + id;
+  // console.log('host', urlGet);
   return axios.get(urlGet);
 };

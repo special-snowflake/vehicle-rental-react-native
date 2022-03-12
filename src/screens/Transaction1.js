@@ -12,12 +12,22 @@ import {Picker} from '@react-native-picker/picker';
 import {useSelector} from 'react-redux';
 import {getUserDetail} from '../modules/utils/user';
 
-const Transaction1 = ({navigation, dataVehicle}) => {
+const Transaction1 = ({navigation, route}) => {
+  console.log(route);
   const [detailUser, setDetailUser] = useState(null);
+  const [idCard, setIdCard] = useState(null);
+  const [name, setName] = useState(null);
+  const [phone, setPhone] = useState(null);
+  const [email, setEmail] = useState(null);
+  const [paymentMethod, setPaymentMethod] = useState('Prepayment');
   const user = useSelector(state => state.auth.userData);
   useEffect(() => {
     if (detailUser === null) {
       getUserDetail(user.id).then(res => {
+        const data = res.data.data;
+        setName(data.full_name);
+        setPhone(data.phone);
+        setEmail(data.email);
         setDetailUser(res.data.data);
         console.log('detail user', res.data.data);
       });
@@ -43,20 +53,34 @@ const Transaction1 = ({navigation, dataVehicle}) => {
             <TextInput
               style={styles.inputField}
               placeholder="Name"
-              defaultValue={detailUser.full_name}
+              defaultValue={name}
+              onChange={text => {
+                setName(text.nativeEvent.text);
+              }}
             />
             <TextInput
               style={styles.inputField}
               placeholder="Mobile phone (must be active)"
-              defaultValue={detailUser.phone !== '' && detailUser.phone}
+              defaultValue={phone !== '' && phone}
+              onChange={text => {
+                setPhone(text.nativeEvent.text);
+              }}
             />
             <TextInput
               style={styles.inputField}
               placeholder="Email Address"
-              defaultValue={detailUser.email}
+              onChange={text => {
+                setEmail(text.nativeEvent.text);
+              }}
+              defaultValue={email}
             />
             <TouchableOpacity style={styles.inputSelect}>
-              <Picker>
+              <Picker
+                selectedValue={paymentMethod}
+                onValueChange={val => {
+                  console.log(val);
+                  setPaymentMethod(val);
+                }}>
                 <Picker.Item label="Prepayment (No Tax)" value={'Prepayment'} />
                 <Picker.Item
                   label="Pay At The End (Include Tax)"
@@ -71,7 +95,16 @@ const Transaction1 = ({navigation, dataVehicle}) => {
             <TouchableOpacity
               style={styles.buttonYellow}
               onPress={() => {
-                navigation.navigate('Transaction2');
+                const params = {
+                  ...route.params,
+                  idCardNumber: idCard,
+                  name,
+                  phone,
+                  email,
+                  paymentMethod,
+                  userId: user.id,
+                };
+                navigation.navigate('Transaction2', params);
               }}>
               <Text style={styles.textButtonYellow}>See Order Details</Text>
             </TouchableOpacity>

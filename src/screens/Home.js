@@ -9,21 +9,24 @@ import {
   Image,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
+import {changeFilter} from '../redux/actions/filter';
 
 import styles from '../commons/styles/Home';
 import {searchVehicle} from '../modules/utils/vehicles';
 import axios from 'axios';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 const imagehost = process.env.URL_API + '/vehicles';
 const Home = ({navigation}) => {
-  const [search, setSearch] = useState(null);
+  const [search, setSearch] = useState('');
   const user = useSelector(state => state.auth.userData);
+  const filter = useSelector(state => state.filter);
   const [listVehicles, setListVehicles] = useState({
     dataBike: [],
     dataCar: [],
     dataMotorCycle: [],
     isSuccess: false,
   });
+  const dispatch = useDispatch();
 
   console.log('list vegicles', listVehicles);
   console.log('data user', user);
@@ -47,8 +50,14 @@ const Home = ({navigation}) => {
       )
       .catch(err => {
         console.log('error', err);
+        console.log('error', err.response);
       });
   }, []);
+  const onSearch = () => {
+    let newFilter = {...filter, keyword: search};
+    dispatch(changeFilter(newFilter));
+    navigation.navigate('SearchVehicle');
+  };
   return (
     <ScrollView style={{backgroundColor: 'white'}}>
       <View style={styles.jumboTronWrapper}>

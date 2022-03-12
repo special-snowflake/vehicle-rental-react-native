@@ -10,7 +10,7 @@ import {
 import React, {useEffect, useState} from 'react';
 import style from '../commons/styles/DetailVehicle';
 import {getVehicleDetail} from '../modules/utils/vehicles';
-import {numberToRupiah} from '../modules/helpers/collection';
+import {grabLocalYMD, numberToRupiah} from '../modules/helpers/collection';
 import {useSelector} from 'react-redux';
 const defaultCar = require('../commons/assets/images/car-default.jpg');
 
@@ -23,17 +23,21 @@ const DetailVehicle = ({navigation, route}) => {
   const [dataVehicle, setDataVehicle] = useState(null);
   const [showDate, setShowDate] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [formatDate, setFormatDate] = useState(null);
+  const [day, setDay] = useState(false);
   const [image, setImage] = useState(defaultCar);
   const [counter, setCounter] = useState(1);
   const user = useSelector(state => state.auth.userData);
 
-  const [open, setOpen] = useState(false);
-  const [date, setDate] = useState(new Date());
+  // const [open, setOpen] = useState(false);
+  // const [date, setDate] = useState(new Date());
 
-  const day = [1, 2, 3, 4, 5, 6, 7];
-
-  const handleDatePicker = date => {
-    console.log('A date has been picked: ', date);
+  const today = new Date();
+  console.log('today', today);
+  const handleDatePicker = value => {
+    console.log('A date has been picked: ', value);
+    setSelectedDate(value);
+    setFormatDate(grabLocalYMD(value));
     setShowDate(false);
   };
 
@@ -165,28 +169,30 @@ const DetailVehicle = ({navigation, route}) => {
                     setShowDate(true);
                   }}>
                   <Text style={{textAlign: 'center', fontSize: 16}}>
-                    Select Date
+                    {formatDate || 'Select Date'}
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={style.pickerRight}>
-                  <Picker>
-                    <Picker.Item
-                      label="Prepayment (No Tax)"
-                      value={'Prepayment'}
-                    />
-                    <Picker.Item
-                      label="Pay At The End (Include Tax)"
-                      value={'Pay At The End'}
-                    />
-                    <Picker.Item
-                      label="Partial Payment (Include Tax)"
-                      value={'Partial Payment'}
-                    />
+                  <Picker
+                    onValueChange={val => {
+                      console.log(val);
+                      setDay(val);
+                    }}
+                    selectedValue={day}>
+                    <Picker.Item label="1 Day" value={1} />
+                    <Picker.Item label="2 Days" value={2} />
+                    <Picker.Item label="3 Days" value={3} />
+                    <Picker.Item label="4 Days" value={4} />
+                    <Picker.Item label="5 Days" value={5} />
+                    <Picker.Item label="6 Days" value={6} />
+                    <Picker.Item label="7 Days" value={7} />
                   </Picker>
                 </TouchableOpacity>
                 <DateTimePicker
                   isVisible={showDate}
                   mode={'date'}
+                  date={selectedDate || new Date()}
+                  minimumDate={today}
                   onConfirm={handleDatePicker}
                   onCancel={() => setShowDate(false)}
                 />
@@ -195,7 +201,19 @@ const DetailVehicle = ({navigation, route}) => {
                 <TouchableOpacity
                   style={style.buttonYellow}
                   onPress={() => {
-                    navigation.navigate('Transaction1', dataVehicle);
+                    let param = {
+                      counter,
+                      day,
+                      startDate: String(selectedDate),
+                      dataVehicle,
+                    };
+                    let endDate = selectedDate;
+                    endDate.setDate(endDate.getDate() + day);
+                    param = {...param, endDate: String(endDate)};
+                    console.log(param);
+                    // const tmp = new Date(String(endDate));
+                    // console.log('tmp', tmp.getFullYear);
+                    navigation.navigate('Transaction1', param);
                   }}>
                   <Text style={style.buttonText}>Reservation</Text>
                 </TouchableOpacity>

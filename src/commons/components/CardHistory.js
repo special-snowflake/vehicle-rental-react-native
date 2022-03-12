@@ -1,21 +1,39 @@
 import {View, Text, Image} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import styles from '../styles/History';
 import {numberToRupiah} from '../../modules/helpers/collection';
+import {Checkbox} from 'react-native-paper';
 
 const defaultVehicle = require('../assets/images/car-default.jpg');
 
 const CardHistory = ({navigation, data}) => {
-  //   console.log('card history', el, idx);
-  //   const [image, setImage] = useState(defaultVehicle);
-  //   if (el.image !== null) {
-  //     const newImage = imghost + el.image;
-  //     setImage({uri: newImage});
-  //   }
+  const [checked, setChecked] = useState([]);
   const imghost = process.env.URL_API + '/vehicles';
   let elements = [];
+
+  const isBoxChecked = idx => {
+    return checked.includes(idx);
+  };
+  const handleChecker = idx => {
+    const isChecked = isBoxChecked(idx);
+    if (!isChecked) {
+      const newArr = [...checked];
+      newArr.push(idx);
+      setChecked(newArr);
+    } else {
+      const index = checked.indexOf(idx);
+      const newArr = [checked];
+      newArr.splice(index);
+      console.log('bug 6');
+      setChecked(newArr);
+    }
+  };
+  console.log('inside checked', checked);
+
+  useEffect(() => {}, [checked, setChecked]);
+
   data.forEach((el, idx) => {
-    console.log(el, idx);
+    // console.log(el, idx);
     const uriImage = imghost + el.image;
     elements.push(
       <View style={styles.contentListWrapper} key={`History-${idx}`}>
@@ -41,7 +59,17 @@ const CardHistory = ({navigation, data}) => {
           </View>
         </View>
         <View style={styles.checkboxWrapper}>
-          <Text style={styles.textRight}>✅</Text>
+          <Text style={styles.textRight}>
+            <Checkbox
+              status={checked.includes(el.history_id) ? 'checked' : 'unchecked'}
+              uncheckedColor="#393939"
+              onPress={() => {
+                handleChecker(el.history_id);
+              }}
+              color="#FFCD61"
+            />
+            <Text>{el.history_id}</Text>
+          </Text>
         </View>
       </View>,
     );

@@ -1,6 +1,6 @@
-import {Dimensions, StyleSheet} from 'react-native';
-const width = Dimensions.get('window').width;
-const height = Dimensions.get('window').height;
+import {StyleSheet} from 'react-native';
+// const width = Dimensions.get('window').width;
+// const height = Dimensions.get('window').height;
 const styles = StyleSheet.create({
   headerWrapper: {
     width: '100%',
@@ -47,5 +47,8 @@ const styles = StyleSheet.create({
     paddingTop: 5,
   },
   paginationButton: {textAlign: 'center', textAlignVertical: 'center'},
+  wh25: {width: 25, height: 25},
+  p15: {padding: 15},
+  mv50: {marginVertical: 50},
 });
 export default styles;

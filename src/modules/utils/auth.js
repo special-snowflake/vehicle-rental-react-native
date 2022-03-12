@@ -17,3 +17,7 @@ export const logout = token => {
     },
   });
 };
+
+export const changePassword = token => {
+  // return axios.patch()
+};

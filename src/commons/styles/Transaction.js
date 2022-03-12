@@ -96,5 +96,43 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     fontWeight: 'bold',
   },
+  payBefore: {
+    textAlign: 'center',
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'red',
+    marginVertical: 10,
+  },
+  bankAcc: {
+    textAlign: 'center',
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginVertical: 10,
+  },
+  detailInfoWrapper: {
+    margin: 15,
+    paddingBottom: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ededed',
+  },
+  bookingCodeWrapper: {
+    textAlign: 'center',
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginVertical: 10,
+  },
+  textGreen: {color: 'green'},
+  textInfoMid: {textAlign: 'center', fontSize: 16},
+  copyBtnWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 10,
+  },
+  fs16: {fontSize: 16},
+  buttonClip: {padding: 10, width: '80%'},
+  info2Wrapper: {
+    paddingHorizontal: 15,
+    paddingVertical: 20,
+  },
 });
 export default styles;

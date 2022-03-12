@@ -1,23 +1,39 @@
-import {View, Text, ScrollView, Image, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  ToastAndroid,
+} from 'react-native';
+import Clipboard from '@react-native-community/clipboard';
 import React, {useEffect, useState} from 'react';
 
 import styles from '../commons/styles/Transaction';
 import {
   generateBookingCode,
   generatePaymentCode,
+  grabLocalYMD,
   numberToRupiah,
 } from '../modules/helpers/collection';
-const Transaction3 = ({navigation}) => {
+const Transaction3 = ({navigation, route}) => {
+  console.log('params t3', route);
+  const {params} = route;
   const [paymentCode, setPaymentCode] = useState(null);
   const [bookingCode, setBookingCode] = useState(null);
 
   useEffect(() => {
     if (paymentCode === null || bookingCode === null) {
       setPaymentCode(generatePaymentCode());
-      setBookingCode(generateBookingCode('Aventador'));
+      setBookingCode(generateBookingCode(params.dataVehicle.name));
     }
-  }, [paymentCode, setPaymentCode, bookingCode, setBookingCode]);
-
+  }, [paymentCode, setPaymentCode, bookingCode, setBookingCode, params]);
+  const copyToClipboard = str => {
+    console.log(str);
+    if (typeof str !== 'string') {
+      str = String(str);
+    }
+    Clipboard.setString(str);
+  };
   return (
     <ScrollView style={styles.scrollView}>
       <View style={styles.pageWrapper}>
@@ -39,87 +55,90 @@ const Transaction3 = ({navigation}) => {
           Insert your payment code while you transfer booking order
         </Text>
         <Text style={styles.textPaymentCode}>Pay before :</Text>
-        <Text
-          style={{
-            textAlign: 'center',
-            fontSize: 20,
-            fontWeight: 'bold',
-            color: 'red',
-            marginVertical: 10,
-          }}>
-          1:59:20
-        </Text>
+        <Text style={styles.payBefore}>1:59:20</Text>
         <Text style={styles.textPaymentCode}>Bank account information :</Text>
-        <Text
-          style={{
-            textAlign: 'center',
-            fontSize: 22,
-            fontWeight: 'bold',
-            marginVertical: 10,
-          }}>
-          2020-1212-30219
-        </Text>
+        <Text style={styles.bankAcc}>2020-1212-30219</Text>
       </View>
-      <View
-        style={{
-          margin: 15,
-          paddingBottom: 20,
-          borderBottomWidth: 1,
-          borderBottomColor: '#ededed',
-        }}>
-        <Text
-          style={{
-            textAlign: 'center',
-            fontSize: 18,
-            fontWeight: 'bold',
-            marginVertical: 10,
-          }}>
-          Booking code : <Text style={{color: 'green'}}>{bookingCode}</Text>
+      <View style={styles.detailInfoWrapper}>
+        <Text style={styles.bookingCodeWrapper}>
+          Booking code : <Text style={styles.textGreen}>{bookingCode}</Text>
         </Text>
-        <Text style={{textAlign: 'center', fontSize: 16}}>
+        <Text style={styles.textInfoMid}>
           Use booking code to pick up your vehicle
         </Text>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-            marginTop: 10,
-          }}>
+        <View style={styles.copyBtnWrapper}>
           <TouchableOpacity
-            style={{...styles.buttonYellow, padding: 10, width: '80%'}}>
-            <Text style={{...styles.textButtonYellow, fontSize: 16}}>
+            style={{...styles.buttonYellow, ...styles.buttonClip}}
+            onPress={() => {
+              ToastAndroid.show(
+                'Code Payment Coppied',
+                ToastAndroid.SHORT,
+                ToastAndroid.CENTER,
+              );
+              copyToClipboard(paymentCode);
+            }}>
+            <Text style={{...styles.textButtonYellow, ...styles.fs16}}>
               Copy Payment Code
             </Text>
           </TouchableOpacity>
         </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-            marginBottom: 10,
-          }}>
+        <View style={styles.copyBtnWrapper}>
           <TouchableOpacity
-            style={{...styles.buttonYellow, padding: 10, width: '80%'}}>
-            <Text style={{...styles.textButtonYellow, fontSize: 16}}>
+            style={{...styles.buttonYellow, ...styles.buttonClip}}
+            onPress={() => {
+              ToastAndroid.show(
+                'Code Booking Coppied',
+                ToastAndroid.LONG,
+                ToastAndroid.TOP,
+                0,
+                100,
+              );
+              copyToClipboard(bookingCode);
+            }}>
+            <Text style={{...styles.textButtonYellow, ...styles.fs16}}>
               Copy Booking Code
             </Text>
           </TouchableOpacity>
         </View>
-        <Text>Order Details:</Text>
-        <Text>2 Vespa</Text>
-        <Text>Prepayment (no tax)</Text>
-        <Text>4 days</Text>
-        <Text>Jan 18</Text>
+        <Text style={styles.fs16}>Order Details:</Text>
+        <Text style={styles.fs16}>
+          {params.counter} {params.dataVehicle.name}
+        </Text>
+        <Text style={styles.fs16}>{params.paymentMethod}</Text>
+        <Text style={styles.fs16}>
+          {params.day} {params.day !== '1' ? 'days' : 'day'}
+        </Text>
+        <Text style={styles.fs16}>
+          {params.startDate.slice(4, 15)} to {params.endDate.slice(4, 15)}
+        </Text>
       </View>
       <View style={{paddingHorizontal: 15, marginBottom: 20}}>
         <Text style={{fontSize: 24, fontWeight: 'bold'}}>
-          Rp. {numberToRupiah(250000)}
+          Rp. {numberToRupiah(params.totalPrice)}
         </Text>
       </View>
       <TouchableOpacity
         style={styles.buttonYellow}
         onPress={() => {
-          navigation.navigate('Transaction2');
+          const dateStart = new Date(params.startDate);
+          const rental_date = grabLocalYMD(dateStart);
+          const dateEnd = new Date(params.endDate);
+          const return_date = grabLocalYMD(dateEnd);
+
+          const body = {
+            fullName: params.name,
+            email: params.email,
+            phone: params.phone,
+            vehicleId: params.dataVehicle.id,
+            userId: params.userId,
+            rental_date,
+            return_date,
+            unit: params.counter,
+            paymentMethod: params.paymentMethod,
+            return_status: 'Not Returned',
+          };
+          console.log(body);
+          // navigation.navigate('Transaction2');
         }}>
         <Text style={styles.textButtonYellow}>Finish Payment</Text>
       </TouchableOpacity>

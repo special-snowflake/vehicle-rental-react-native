@@ -13,19 +13,20 @@ import {searchVehicle} from '../modules/utils/vehicles';
 // import {ScrollView, TextInput} from 'react-native-gesture-handler';
 import CategoryCard from '../commons/components/CategoryCard';
 import styles from '../commons/styles/SearchVehicle';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  resetFilterSearch,
+  changeFilter as changeFilterRedux,
+} from '../redux/actions/filter';
 
 const SearchVehicle = ({navigation, route}) => {
-  console.log(navigation, route.params);
+  const filter = useSelector(state => state.filter);
+  const dispatch = useDispatch();
+
   const [isLoading, setIsLoading] = useState(true);
-  const [searchField, setSearchField] = useState(route.params || '');
+  const [searchField, setSearchField] = useState(filter.keyword);
   const [list, setList] = useState([]);
   const [meta, setMeta] = useState(null);
-  const [filter, setFilter] = useState({
-    keyword: route.params || '',
-    limit: 5,
-    page: 1,
-    sort: 'asc',
-  });
 
   useEffect(() => {
     console.log(filter);
@@ -44,6 +45,7 @@ const SearchVehicle = ({navigation, route}) => {
 
   useEffect(() => {
     const newFilter = '?' + serialize(filter);
+    console.log('res of serialize ', newFilter);
     searchVehicle(newFilter)
       .then(res => {
         setList(res.data.data);
@@ -54,19 +56,8 @@ const SearchVehicle = ({navigation, route}) => {
       .catch(err => {
         console.log(err.response);
       });
-  }, [filter.keyword, filter.page]);
+  }, [filter]);
 
-  const debounce = (func, timeout = 2000) => {
-    let timer;
-    console.log('debounce');
-    return (...args) => {
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        console.log('debounce done');
-        func.apply(this, args);
-      }, timeout);
-    };
-  };
   const showPagination = () => {
     const elements = [];
     console.log('pagination meta', meta);
@@ -82,7 +73,8 @@ const SearchVehicle = ({navigation, route}) => {
           onPress={() => {
             if (i !== filter.page) {
               const newFilter = {...filter, page: i};
-              setFilter(newFilter);
+              dispatch(changeFilterRedux(newFilter));
+              // setFilter(newFilter);
               setIsLoading(true);
             }
           }}>
@@ -93,9 +85,9 @@ const SearchVehicle = ({navigation, route}) => {
     return elements;
   };
   const searchHandler = () => {
-    const newKeyword = searchField;
-    const newFilter = {...filter, keyword: newKeyword, page: 1};
-    setFilter(newFilter);
+    const newFilter = {...filter, keyword: searchField, page: 1};
+    console.log('newfilter', newFilter);
+    dispatch(changeFilterRedux(newFilter));
     setIsLoading(true);
   };
   console.log(filter);
@@ -121,25 +113,28 @@ const SearchVehicle = ({navigation, route}) => {
           }}>
           <Image
             source={require('../commons/assets/icons/search.png')}
-            style={{width: 25, height: 25}}
-            // style={styles.searchLogo}
+            style={styles.wh25}
           />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.filterButtonWrapper}>
+        <TouchableOpacity
+          style={styles.filterButtonWrapper}
+          onPress={() => {
+            navigation.navigate('SearchFilter');
+          }}>
           <Image
             source={require('../commons/assets/icons/filter.png')}
-            style={{width: 25, height: 25}}
+            style={styles.wh25}
           />
           <Text style={styles.filterText}>Filter Search</Text>
         </TouchableOpacity>
       </View>
       {!isLoading ? (
-        <View style={{padding: 15}}>
+        <View style={styles.p15}>
           <CategoryCard navigation={navigation} data={list} />
           <View style={styles.pageWrapper}>{showPagination()}</View>
         </View>
       ) : (
-        <View style={{marginVertical: 50}}>
+        <View style={styles.marginLoading}>
           <ActivityIndicator size="large" color="#FFCD61" />
         </View>
       )}
