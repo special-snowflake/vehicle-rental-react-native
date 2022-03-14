@@ -134,5 +134,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 20,
   },
+  priceBig: {paddingHorizontal: 15, marginBottom: 20},
+  priceText: {fontSize: 24, fontWeight: 'bold'},
 });
 export default styles;

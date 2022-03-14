@@ -1,6 +1,6 @@
-import {Dimensions, StyleSheet} from 'react-native';
-const width = Dimensions.get('window').width;
-const height = Dimensions.get('window').height;
+import {StyleSheet} from 'react-native';
+// const width = Dimensions.get('window').width;
+// const height = Dimensions.get('window').height;
 const styles = StyleSheet.create({
   viewScroll: {backgroundColor: 'white', padding: 15},
   userImageWrapper: {
@@ -59,7 +59,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 15,
-    marginVertical: 20,
+    marginBottom: 25,
+    marginTop: 20,
     backgroundColor: '#FFCD61',
     borderRadius: 7,
   },

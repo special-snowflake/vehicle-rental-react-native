@@ -5,12 +5,14 @@ import {
   TextInput,
   TouchableOpacity,
   ActivityIndicator,
+  ToastAndroid,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import styles from '../commons/styles/Transaction';
 import {Picker} from '@react-native-picker/picker';
 import {useSelector} from 'react-redux';
 import {getUserDetail} from '../modules/utils/user';
+import {customToast} from '../modules/helpers/toast';
 
 const Transaction1 = ({navigation, route}) => {
   console.log(route);
@@ -49,7 +51,13 @@ const Transaction1 = ({navigation, route}) => {
                 <Text style={styles.pageText}>3</Text>
               </View>
             </View>
-            <TextInput style={styles.inputField} placeholder="ID card number" />
+            <TextInput
+              style={styles.inputField}
+              placeholder="ID card number"
+              onChange={text => {
+                setIdCard(text.nativeEvent.text);
+              }}
+            />
             <TextInput
               style={styles.inputField}
               placeholder="Name"
@@ -61,6 +69,7 @@ const Transaction1 = ({navigation, route}) => {
             <TextInput
               style={styles.inputField}
               placeholder="Mobile phone (must be active)"
+              keyboardType="number-pad"
               defaultValue={phone !== '' && phone}
               onChange={text => {
                 setPhone(text.nativeEvent.text);
@@ -69,6 +78,7 @@ const Transaction1 = ({navigation, route}) => {
             <TextInput
               style={styles.inputField}
               placeholder="Email Address"
+              keyboardType="email-address"
               onChange={text => {
                 setEmail(text.nativeEvent.text);
               }}
@@ -95,16 +105,29 @@ const Transaction1 = ({navigation, route}) => {
             <TouchableOpacity
               style={styles.buttonYellow}
               onPress={() => {
-                const params = {
-                  ...route.params,
-                  idCardNumber: idCard,
-                  name,
-                  phone,
-                  email,
-                  paymentMethod,
-                  userId: user.id,
-                };
-                navigation.navigate('Transaction2', params);
+                if (
+                  !idCard ||
+                  idCard === '' ||
+                  !name ||
+                  name === '' ||
+                  !phone ||
+                  phone === '' ||
+                  !email ||
+                  email === ''
+                ) {
+                  customToast(ToastAndroid, 'Fill all the field to continue');
+                } else {
+                  const params = {
+                    ...route.params,
+                    idCardNumber: idCard,
+                    name,
+                    phone,
+                    email,
+                    paymentMethod,
+                    userId: user.id,
+                  };
+                  navigation.navigate('Transaction2', params);
+                }
               }}>
               <Text style={styles.textButtonYellow}>See Order Details</Text>
             </TouchableOpacity>

@@ -1,4 +1,4 @@
-import {View, Text, Image} from 'react-native';
+import {View, Text, Image, TouchableOpacity} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import styles from '../styles/History';
 import {numberToRupiah} from '../../modules/helpers/collection';
@@ -6,7 +6,7 @@ import {Checkbox} from 'react-native-paper';
 
 const defaultVehicle = require('../assets/images/car-default.jpg');
 
-const CardHistory = ({navigation, data}) => {
+const CardHistory = ({navigation, data, callback}) => {
   const [checked, setChecked] = useState([]);
   const imghost = process.env.URL_API + '/vehicles';
   let elements = [];
@@ -20,12 +20,14 @@ const CardHistory = ({navigation, data}) => {
       const newArr = [...checked];
       newArr.push(idx);
       setChecked(newArr);
+      callback(newArr);
     } else {
       const index = checked.indexOf(idx);
-      const newArr = [checked];
+      const newArr = [...checked];
       newArr.splice(index);
       console.log('bug 6');
       setChecked(newArr);
+      callback(newArr);
     }
   };
   console.log('inside checked', checked);
@@ -33,13 +35,17 @@ const CardHistory = ({navigation, data}) => {
   useEffect(() => {}, [checked, setChecked]);
 
   data.forEach((el, idx) => {
-    // console.log(el, idx);
+    console.log(el, idx);
     const uriImage = imghost + el.image;
     elements.push(
       <View style={styles.contentListWrapper} key={`History-${idx}`}>
-        <View style={{flex: 3}}>
-          <View style={styles.contentImageWrapper}>
-            <View style={{flex: 3}}>
+        <View style={styles.flex6}>
+          <TouchableOpacity
+            style={styles.contentImageWrapper}
+            onPress={() => {
+              navigation.navigate('DetailHistory', el.history_id);
+            }}>
+            <View style={styles.flex3}>
               <Image
                 source={{uri: uriImage}}
                 onError={({currentTarget}) => {
@@ -51,12 +57,13 @@ const CardHistory = ({navigation, data}) => {
                 style={styles.contentImage}
               />
             </View>
-            <View style={{flex: 3, height: 90}}>
-              <Text style={{fontWeight: 'bold'}}>{el.name}</Text>
+            <View style={styles.boxInfo}>
+              <Text style={styles.fwBold}>{el.vehicle_name}</Text>
               <Text>{el.rental_date}</Text>
               <Text>Rp.{numberToRupiah(el.total_payment)}</Text>
+              <Text>{el.return_status}</Text>
             </View>
-          </View>
+          </TouchableOpacity>
         </View>
         <View style={styles.checkboxWrapper}>
           <Text style={styles.textRight}>
@@ -68,7 +75,6 @@ const CardHistory = ({navigation, data}) => {
               }}
               color="#FFCD61"
             />
-            <Text>{el.history_id}</Text>
           </Text>
         </View>
       </View>,

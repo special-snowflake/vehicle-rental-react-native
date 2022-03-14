@@ -19,18 +19,33 @@ const styles = StyleSheet.create({
     height: height,
   },
   inputWrapper: {
-    marginTop: 170,
+    marginTop: 150,
     marginHorizontal: 5,
   },
   inputForm: {
     borderRadius: 5,
-    backgroundColor: '#FFFFFF',
-    opacity: 0.75,
-    padding: 10,
+    backgroundColor: 'rgba(255,255,255,0.7)',
+    height: 50,
+    // opacity: 0.75,
+    paddingLeft: 15,
     borderWidth: 1,
     borderColor: '#FFFFFF',
     marginBottom: 15,
+    fontSize: 16,
   },
+  inputPassword: {
+    position: 'relative',
+    // paddingRight: 50,
+  },
+  showWrapper: {
+    position: 'absolute',
+    top: 0,
+    left: 'auto',
+    right: 0,
+    paddingVertical: 15,
+    paddingHorizontal: 15,
+  },
+  showButton: {color: 'blue'},
   forget: {
     color: '#FFFFFF',
     textDecorationLine: 'underline',
@@ -57,6 +72,10 @@ const styles = StyleSheet.create({
   signup: {
     textDecorationColor: '#FFFF',
     textDecorationLine: 'underline',
+  },
+  mv30: {marginVertical: 30},
+  indicatorWrapper: {
+    height: 25,
   },
 });
 

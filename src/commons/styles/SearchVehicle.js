@@ -49,6 +49,6 @@ const styles = StyleSheet.create({
   paginationButton: {textAlign: 'center', textAlignVertical: 'center'},
   wh25: {width: 25, height: 25},
   p15: {padding: 15},
-  mv50: {marginVertical: 50},
+  marginLoading: {marginVertical: 50},
 });
 export default styles;

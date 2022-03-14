@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Modal,
+  ToastAndroid,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
@@ -17,6 +18,7 @@ import style from '../commons/styles/Profile';
 import modalStyle from '../commons/styles/Modals';
 import {getUserDetail} from '../modules/utils/user';
 import {capitalizeFirstLetter} from '../modules/helpers/collection';
+import {customToast} from '../modules/helpers/toast';
 
 const defaultUser = require('../commons/assets/images/defaultSmall.jpg');
 const imagehost = process.env.URL_API + '/user';
@@ -32,6 +34,7 @@ const Profile = ({navigation}) => {
     console.log(user);
     console.log('token', user.token);
     console.log('logout');
+    customToast(ToastAndroid, 'Logout Success');
     logout(user.token);
     dispatch(logoutAction());
     navigation.replace('Login');
@@ -52,8 +55,10 @@ const Profile = ({navigation}) => {
       });
   };
   useEffect(() => {
-    getUserInfo();
-  }, []);
+    if (user.token && user.token !== '') {
+      getUserInfo();
+    }
+  }, [user]);
   return (
     <>
       {user && user.token && user.token !== '' ? (

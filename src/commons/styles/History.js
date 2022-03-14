@@ -1,6 +1,4 @@
 import {StyleSheet} from 'react-native';
-// const width = Dimensions.get('window').width;
-// const height = Dimensions.get('window').height;
 const styles = StyleSheet.create({
   viewScroll: {backgroundColor: 'white', padding: 15},
   headerWrapper: {
@@ -83,5 +81,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   loginInfo: {textAlign: 'center', fontSize: 18, marginVertical: 50},
+  flex1: {flex: 1},
+  flex3: {flex: 3},
+  flex6: {flex: 6},
+  marginLoading: {marginVertical: 50},
+  fwBold: {fontWeight: 'bold'},
+  boxInfo: {flex: 4, height: 90},
 });
 export default styles;

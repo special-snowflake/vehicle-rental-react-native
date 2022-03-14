@@ -19,6 +19,7 @@ import {
 import {getCategory} from '../modules/utils/category';
 import {getCity} from '../modules/utils/city';
 import {Picker} from '@react-native-picker/picker';
+import {customToast} from '../modules/helpers/toast';
 
 const nextIcon = require('../commons/assets/icons/next.png');
 const downIcon = require('../commons/assets/icons/down.png');
@@ -173,6 +174,7 @@ const SearchFilter = ({navigation}) => {
                 <TextInput
                   placeholder="Min. Price"
                   keyboardType="number-pad"
+                  defaultValue={String(price.priceMin)}
                   onChange={text => {
                     const data = text.nativeEvent.text.replace(/[^0-9]/g, '');
                     if (data.length > 0) {
@@ -186,6 +188,7 @@ const SearchFilter = ({navigation}) => {
                 <TextInput
                   placeholder="Max. Price"
                   keyboardType="number-pad"
+                  defaultValue={String(price.priceMax)}
                   onChange={text => {
                     const data = text.nativeEvent.text.replace(/[^0-9]/g, '');
                     if (data.length > 0) {
@@ -245,11 +248,7 @@ const SearchFilter = ({navigation}) => {
             onPress={() => {
               console.log('Min Max', dataFilter.priceMin, dataFilter.priceMax);
               if (dataFilter.priceMin > dataFilter.priceMax) {
-                ToastAndroid.showWithGravity(
-                  'Invalid Price Range',
-                  ToastAndroid.LONG,
-                  ToastAndroid.TOP,
-                );
+                customToast(ToastAndroid, 'Invalid Price Range');
               } else {
                 const data = {...dataFilter, page: 1};
                 dispatch(changeFilerRedux(data));

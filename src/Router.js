@@ -11,6 +11,7 @@ import SignUp from './screens/SignUp';
 import DetailVehicle from './screens/DetailVehicle';
 import {NavigationContainer} from '@react-navigation/native';
 import History from './screens/History';
+import DetailHistory from './screens/DetailHistory';
 import Chat from './screens/Chat';
 import {Image, StyleSheet, View} from 'react-native';
 import VehicleCategory from './screens/VehicleCategory';
@@ -71,10 +72,11 @@ const HomeTab = () => {
 const HistoryTab = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="History1" component={History} />
       <Stack.Screen
-        name="History1"
-        component={History}
-        screenOptions={{headerShown: false}}
+        name="DetailHistory"
+        component={DetailHistory}
+        options={{headerShown: true, title: 'See History'}}
       />
     </Stack.Navigator>
   );

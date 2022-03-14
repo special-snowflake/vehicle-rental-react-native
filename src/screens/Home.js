@@ -16,6 +16,7 @@ import {searchVehicle} from '../modules/utils/vehicles';
 import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
 const imagehost = process.env.URL_API + '/vehicles';
+console.log('image host', imagehost);
 const Home = ({navigation}) => {
   const [search, setSearch] = useState('');
   const user = useSelector(state => state.auth.userData);

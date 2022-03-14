@@ -5,19 +5,25 @@ import {
   ScrollView,
   ImageBackground,
   TouchableOpacity,
+  ToastAndroid,
+  ActivityIndicator,
   // KeyboardAvoidingView,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import styles from '../commons/styles/Auth';
 import {connect, useDispatch} from 'react-redux';
 import {loginAction} from '../redux/actions/auth';
+import {customToast} from '../modules/helpers/toast';
+import {useIsFocused} from '@react-navigation/native';
 
 const Login = props => {
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const dispatch = useDispatch();
   const navigation = props.navigation;
+  const isFocused = useIsFocused();
   const handleLogin = () => {
     const body = {
       user: email,
@@ -32,15 +38,17 @@ const Login = props => {
       setIsFetching(true);
       navigation.navigate('StackTab');
       console.log('login success');
+      customToast(ToastAndroid, 'Login Success');
     }
     if (props.auth.isRejected === true) {
       setIsFetching(false);
       console.log('login failed');
+      customToast(ToastAndroid, 'Login Failed');
     }
     if (props.auth.isPending === true) {
       setIsFetching(true);
     }
-  }, [props.auth, navigation]);
+  }, [props.auth, navigation, isFocused]);
 
   return (
     <ScrollView>
@@ -60,17 +68,39 @@ const Login = props => {
                 setEmail(text.nativeEvent.text);
               }}
             />
-            <TextInput
-              style={styles.inputForm}
-              placeholder="Password"
-              secureTextEntry={true}
-              onChange={text => {
-                setPassword(text.nativeEvent.text);
-              }}
-            />
+            <View style={{...styles.inputForm, ...styles.inputPassword}}>
+              <TextInput
+                placeholder="Password"
+                secureTextEntry={!showPassword}
+                onChange={text => {
+                  setPassword(text.nativeEvent.text);
+                }}
+              />
+              <TouchableOpacity
+                style={styles.showWrapper}
+                onPress={() => {
+                  setShowPassword(!showPassword);
+                }}>
+                <Text style={styles.showButton}>
+                  {showPassword ? 'Hide' : 'Show'}
+                </Text>
+              </TouchableOpacity>
+            </View>
             <Text style={styles.forget}>Forget Password?</Text>
-            <TouchableOpacity style={styles.btnYellow} onPress={handleLogin}>
-              <Text style={styles.btnText}>Login</Text>
+            <TouchableOpacity
+              style={styles.btnYellow}
+              onPress={() => {
+                if (!isFetching) {
+                  handleLogin();
+                }
+              }}>
+              {!isFetching ? (
+                <Text style={styles.btnText}>Login</Text>
+              ) : (
+                <View style={styles.indicatorWrapper}>
+                  <ActivityIndicator size="small" color="#393939" />
+                </View>
+              )}
             </TouchableOpacity>
             <View>
               <Text style={styles.signupWrapper}>
@@ -84,7 +114,7 @@ const Login = props => {
                 </Text>
               </Text>
             </View>
-            <View style={{marginVertical: 30}}>
+            <View style={styles.mv30}>
               <Text
                 style={styles.signupWrapper}
                 onPress={() => {

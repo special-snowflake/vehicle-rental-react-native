@@ -15,12 +15,16 @@ import {
   grabLocalYMD,
   numberToRupiah,
 } from '../modules/helpers/collection';
+import {customToast} from '../modules/helpers/toast';
+import {useSelector} from 'react-redux';
+import {addHistory} from '../modules/utils/history';
+
 const Transaction3 = ({navigation, route}) => {
+  const user = useSelector(state => state.auth.userData);
   console.log('params t3', route);
   const {params} = route;
   const [paymentCode, setPaymentCode] = useState(null);
   const [bookingCode, setBookingCode] = useState(null);
-
   useEffect(() => {
     if (paymentCode === null || bookingCode === null) {
       setPaymentCode(generatePaymentCode());
@@ -55,6 +59,7 @@ const Transaction3 = ({navigation, route}) => {
           Insert your payment code while you transfer booking order
         </Text>
         <Text style={styles.textPaymentCode}>Pay before :</Text>
+        {/* <Timer /> */}
         <Text style={styles.payBefore}>1:59:20</Text>
         <Text style={styles.textPaymentCode}>Bank account information :</Text>
         <Text style={styles.bankAcc}>2020-1212-30219</Text>
@@ -70,11 +75,7 @@ const Transaction3 = ({navigation, route}) => {
           <TouchableOpacity
             style={{...styles.buttonYellow, ...styles.buttonClip}}
             onPress={() => {
-              ToastAndroid.show(
-                'Code Payment Coppied',
-                ToastAndroid.SHORT,
-                ToastAndroid.CENTER,
-              );
+              customToast(ToastAndroid, 'Code Payment Copied');
               copyToClipboard(paymentCode);
             }}>
             <Text style={{...styles.textButtonYellow, ...styles.fs16}}>
@@ -86,13 +87,7 @@ const Transaction3 = ({navigation, route}) => {
           <TouchableOpacity
             style={{...styles.buttonYellow, ...styles.buttonClip}}
             onPress={() => {
-              ToastAndroid.show(
-                'Code Booking Coppied',
-                ToastAndroid.LONG,
-                ToastAndroid.TOP,
-                0,
-                100,
-              );
+              customToast(ToastAndroid, 'Code Booking Copied');
               copyToClipboard(bookingCode);
             }}>
             <Text style={{...styles.textButtonYellow, ...styles.fs16}}>
@@ -112,8 +107,8 @@ const Transaction3 = ({navigation, route}) => {
           {params.startDate.slice(4, 15)} to {params.endDate.slice(4, 15)}
         </Text>
       </View>
-      <View style={{paddingHorizontal: 15, marginBottom: 20}}>
-        <Text style={{fontSize: 24, fontWeight: 'bold'}}>
+      <View style={styles.priceBig}>
+        <Text style={styles.priceText}>
           Rp. {numberToRupiah(params.totalPrice)}
         </Text>
       </View>
@@ -126,17 +121,32 @@ const Transaction3 = ({navigation, route}) => {
           const return_date = grabLocalYMD(dateEnd);
 
           const body = {
-            fullName: params.name,
+            user_id: params.userId,
+            id_card: params.idCardNumber,
+            full_name: params.name,
             email: params.email,
             phone: params.phone,
-            vehicleId: params.dataVehicle.id,
-            userId: params.userId,
+            vehicle_id: params.dataVehicle.id,
             rental_date,
             return_date,
             unit: params.counter,
-            paymentMethod: params.paymentMethod,
+            payment_code: paymentCode,
+            booking_code: bookingCode,
+            payment_method: params.paymentMethod,
             return_status: 'Not Returned',
+            total_payment: params.totalPrice,
           };
+          addHistory(body, user.token)
+            .then(res => {
+              customToast(ToastAndroid, 'Reservation Success');
+              console.log(res);
+              const id = res.data.data.id;
+              navigation.navigate('DetailHistory', id);
+            })
+            .catch(err => {
+              customToast(ToastAndroid, 'Something went wrong');
+              console.log(err);
+            });
           console.log(body);
           // navigation.navigate('Transaction2');
         }}>

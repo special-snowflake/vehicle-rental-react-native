@@ -4,21 +4,19 @@ import {
   TextInput,
   ScrollView,
   ImageBackground,
-  // KeyboardAvoidingView,
   TouchableOpacity,
+  ToastAndroid,
 } from 'react-native';
 import React, {useState} from 'react';
 import styles from '../commons/styles/Auth';
-// import {TouchableOpacity} from 'react-native-gesture-handler';
-// import {useDispatch} from 'react-redux';
 import {register} from '../modules/utils/auth';
+import {customToast} from '../modules/helpers/toast';
 
 const SignUp = ({navigation}) => {
   const [email, setEmail] = useState(null);
   const [name, setName] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState(null);
-  // const dispatch = useDispatch();
-  // const navigation = props.navigation;
   const handleSignup = () => {
     const body = {
       email,
@@ -28,9 +26,11 @@ const SignUp = ({navigation}) => {
     console.log(body);
     register(body)
       .then(res => {
+        customToast(ToastAndroid, 'Registration Success');
         navigation.navigate('Login');
       })
       .catch(err => {
+        customToast(ToastAndroid, 'Registration Failed');
         console.log(err);
       });
   };
@@ -60,15 +60,24 @@ const SignUp = ({navigation}) => {
                 setEmail(text.nativeEvent.text);
               }}
             />
-            <TextInput
-              style={styles.inputForm}
-              placeholder="Password"
-              secureTextEntry={true}
-              onChange={text => {
-                setPassword(text.nativeEvent.text);
-              }}
-            />
-            {/* <Text style={styles.forget}>Forget Password?</Text> */}
+            <View style={{...styles.inputForm, ...styles.inputPassword}}>
+              <TextInput
+                placeholder="Password"
+                secureTextEntry={!showPassword}
+                onChange={text => {
+                  setPassword(text.nativeEvent.text);
+                }}
+              />
+              <TouchableOpacity
+                style={styles.showWrapper}
+                onPress={() => {
+                  setShowPassword(!showPassword);
+                }}>
+                <Text style={styles.showButton}>
+                  {showPassword ? 'Hide' : 'Show'}
+                </Text>
+              </TouchableOpacity>
+            </View>
             <TouchableOpacity style={styles.btnYellow} onPress={handleSignup}>
               <Text style={styles.btnText}>Sign Up</Text>
             </TouchableOpacity>
@@ -84,7 +93,7 @@ const SignUp = ({navigation}) => {
                 </Text>
               </Text>
             </View>
-            <View style={{marginVertical: 30}}>
+            <View style={styles.mv30}>
               <Text
                 style={styles.signupWrapper}
                 onPress={() => {

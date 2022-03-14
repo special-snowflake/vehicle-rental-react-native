@@ -24,7 +24,7 @@ const DetailVehicle = ({navigation, route}) => {
   const [showDate, setShowDate] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [formatDate, setFormatDate] = useState(null);
-  const [day, setDay] = useState(false);
+  const [day, setDay] = useState(1);
   const [image, setImage] = useState(defaultCar);
   const [counter, setCounter] = useState(1);
   const user = useSelector(state => state.auth.userData);

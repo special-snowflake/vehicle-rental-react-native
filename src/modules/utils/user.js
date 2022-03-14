@@ -28,3 +28,13 @@ export const getUserDetail = id => {
   // console.log('host', urlGet);
   return axios.get(urlGet);
 };
+
+export const changePassword = (body, token) => {
+  console.log('utils', body);
+  const urlChangePass = URL + '/change-password';
+  return axios.patch(urlChangePass, body, {
+    headers: {
+      'x-authorized-token': token,
+    },
+  });
+};

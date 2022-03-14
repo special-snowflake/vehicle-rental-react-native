@@ -191,13 +191,13 @@ const UpdateProfile = ({navigation, route: {params}}) => {
         }}>
         <Text style={style.textButton}>Save Change</Text>
       </TouchableOpacity>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={style.buttonBlack}
         onPress={() => {
           // handleSaveChanges();
         }}>
         <Text style={style.textButtonBlack}>Change Password</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </ScrollView>
   );
 };

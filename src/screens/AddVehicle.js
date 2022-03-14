@@ -81,7 +81,7 @@ const AddVehicle = ({navigation}) => {
       PermissionsAndroid.PERMISSIONS.CAMERA,
       {
         title: 'App Camera Permission',
-        message: 'App needs access to your camera ',
+        message: 'App needs access to your camera',
         buttonNeutral: 'Ask Me Later',
         buttonNegative: 'Cancel',
         buttonPositive: 'OK',
