@@ -8,12 +8,19 @@ const styles = StyleSheet.create({
     position: 'relative',
     marginBottom: 20,
   },
-  searchInput: {padding: 15, borderBottomWidth: 1},
+  searchInput: {
+    padding: 10,
+    backgroundColor: '#EDEDED',
+    margin: 15,
+    borderRadius: 7,
+  },
+  hr: {borderBottomWidth: 1, borderBottomColor: '#EDEDED'},
   searchIcon: {
     position: 'absolute',
     left: 'auto',
-    right: 15,
-    top: 20,
+    right: 25,
+    top: 25,
+    // backgroundColor: 'red',
   },
   filterButtonWrapper: {
     display: 'flex',
@@ -22,8 +29,6 @@ const styles = StyleSheet.create({
     padding: 15,
     width: '100%',
     height: 50,
-    borderBottomWidth: 1,
-    borderBottomColor: '#616167',
   },
   filterText: {
     fontSize: 17,
@@ -48,7 +53,7 @@ const styles = StyleSheet.create({
   },
   paginationButton: {textAlign: 'center', textAlignVertical: 'center'},
   wh25: {width: 25, height: 25},
-  p15: {padding: 15},
+  p15: {paddingVertical: 25, paddingHorizontal: 15},
   marginLoading: {marginVertical: 50},
 });
 export default styles;

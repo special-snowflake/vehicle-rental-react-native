@@ -36,7 +36,7 @@ const Login = props => {
   useEffect(() => {
     if (props.auth.isFulfilled === true) {
       setIsFetching(true);
-      navigation.navigate('StackTab');
+      navigation.replace('StackTab');
       console.log('login success');
       customToast(ToastAndroid, 'Login Success');
     }

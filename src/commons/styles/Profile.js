@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   name: {fontWeight: 'bold', fontSize: 16},
+  fs16: {fontSize: 16},
   menuWrapper: {
     height: 50,
     marginBottom: 5,
@@ -50,7 +51,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   menuText: {flex: 1},
-  menuTextContent: {fontWeight: 'bold', fontSize: 15},
+  menuTextContent: {fontWeight: 'bold', fontSize: 16},
   menuImageWrapper: {flex: 1, position: 'relative'},
   menuImage: {width: 8, height: 15, position: 'absolute', right: 0},
   buttonLogout: {

@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#EDEDED',
+    borderColor: '#393939',
   },
   label: {
     fontSize: 15,

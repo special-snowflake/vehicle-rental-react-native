@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import Clipboard from '@react-native-community/clipboard';
 import React, {useEffect, useState} from 'react';
-
+import {notification} from '../commons/components/Notification';
 import styles from '../commons/styles/Transaction';
 import {
   generateBookingCode,
@@ -37,6 +37,49 @@ const Transaction3 = ({navigation, route}) => {
       str = String(str);
     }
     Clipboard.setString(str);
+  };
+  const handleFinishPayment = () => {
+    const dateStart = new Date(params.startDate);
+    const rental_date = grabLocalYMD(dateStart);
+    const dateEnd = new Date(params.endDate);
+    const return_date = grabLocalYMD(dateEnd);
+
+    const body = {
+      user_id: params.userId,
+      id_card: params.idCardNumber,
+      full_name: params.name,
+      email: params.email,
+      phone: params.phone,
+      vehicle_id: params.dataVehicle.id,
+      rental_date,
+      return_date,
+      unit: params.counter,
+      payment_code: paymentCode,
+      booking_code: bookingCode,
+      payment_method: params.paymentMethod,
+      return_status: 'Not Returned',
+      total_payment: params.totalPrice,
+    };
+    addHistory(body, user.token)
+      .then(res => {
+        customToast(ToastAndroid, 'Reservation Success');
+        console.log(res);
+        const id = res.data.data.id;
+        notification.configure();
+        notification.createChannel(bookingCode);
+        const msg = 'Reservation ' + params.dataVehicle.name + ' success.';
+        notification.sendNotification(
+          bookingCode,
+          'Vehicle Rental Reservation',
+          msg,
+        );
+        navigation.navigate('History', {screen: 'DetailHistory', params: id});
+      })
+      .catch(err => {
+        customToast(ToastAndroid, 'Something went wrong');
+        console.log(err);
+      });
+    console.log(body);
   };
   return (
     <ScrollView style={styles.scrollView}>
@@ -115,40 +158,7 @@ const Transaction3 = ({navigation, route}) => {
       <TouchableOpacity
         style={styles.buttonYellow}
         onPress={() => {
-          const dateStart = new Date(params.startDate);
-          const rental_date = grabLocalYMD(dateStart);
-          const dateEnd = new Date(params.endDate);
-          const return_date = grabLocalYMD(dateEnd);
-
-          const body = {
-            user_id: params.userId,
-            id_card: params.idCardNumber,
-            full_name: params.name,
-            email: params.email,
-            phone: params.phone,
-            vehicle_id: params.dataVehicle.id,
-            rental_date,
-            return_date,
-            unit: params.counter,
-            payment_code: paymentCode,
-            booking_code: bookingCode,
-            payment_method: params.paymentMethod,
-            return_status: 'Not Returned',
-            total_payment: params.totalPrice,
-          };
-          addHistory(body, user.token)
-            .then(res => {
-              customToast(ToastAndroid, 'Reservation Success');
-              console.log(res);
-              const id = res.data.data.id;
-              navigation.navigate('DetailHistory', id);
-            })
-            .catch(err => {
-              customToast(ToastAndroid, 'Something went wrong');
-              console.log(err);
-            });
-          console.log(body);
-          // navigation.navigate('Transaction2');
+          handleFinishPayment();
         }}>
         <Text style={styles.textButtonYellow}>Finish Payment</Text>
       </TouchableOpacity>

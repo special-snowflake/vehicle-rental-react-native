@@ -54,6 +54,7 @@ const Transaction1 = ({navigation, route}) => {
             <TextInput
               style={styles.inputField}
               placeholder="ID card number"
+              keyboardType="number-pad"
               onChange={text => {
                 setIdCard(text.nativeEvent.text);
               }}

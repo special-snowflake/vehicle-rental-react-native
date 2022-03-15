@@ -7,12 +7,16 @@ import {
   TouchableOpacity,
   ToastAndroid,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import styles from '../commons/styles/Auth';
 import {register} from '../modules/utils/auth';
 import {customToast} from '../modules/helpers/toast';
+import {useSelector} from 'react-redux';
+import {useIsFocused} from '@react-navigation/native';
 
 const SignUp = ({navigation}) => {
+  const user = useSelector(state => state.auth.userData);
+  const isFocused = useIsFocused();
   const [email, setEmail] = useState(null);
   const [name, setName] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
@@ -35,6 +39,11 @@ const SignUp = ({navigation}) => {
       });
   };
 
+  useEffect(() => {
+    if (user.token !== '') {
+      navigation.navigate('Home1');
+    }
+  }, [isFocused, user]);
   return (
     <ScrollView>
       <ImageBackground

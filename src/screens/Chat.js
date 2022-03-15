@@ -13,7 +13,11 @@ const Chat = ({navigation}) => {
       <ScrollView style={styles.scrollView}>
         <TextInput style={styles.searchInput} placeholder="Search Chat" />
         <View>
-          <TouchableOpacity style={styles.chatListWrapper}>
+          <TouchableOpacity
+            style={styles.chatListWrapper}
+            onPress={() => {
+              navigation.navigate('ChatDetail');
+            }}>
             <View style={styles.chatWrapper}>
               <Text style={styles.userName}>User 1</Text>
               <Text style={styles.fs15}>Just now</Text>
@@ -23,7 +27,7 @@ const Chat = ({navigation}) => {
                 Hey, there are 3 vespa left
               </Text>
               <View style={styles.indicatorChat}>
-                <Text>9+</Text>
+                <Text>2</Text>
               </View>
             </View>
           </TouchableOpacity>

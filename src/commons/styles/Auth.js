@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
   },
   inputForm: {
     borderRadius: 5,
-    backgroundColor: 'rgba(255,255,255,0.7)',
+    backgroundColor: 'rgba(255,255,255,0.8)',
     height: 50,
     // opacity: 0.75,
     paddingLeft: 15,

@@ -9,14 +9,17 @@ import {
   Image,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {changeFilter} from '../redux/actions/filter';
-
-import styles from '../commons/styles/Home';
-import {searchVehicle} from '../modules/utils/vehicles';
 import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
+
+import {changeFilter} from '../redux/actions/filter';
+import {searchVehicle} from '../modules/utils/vehicles';
+
 const imagehost = process.env.URL_API + '/vehicles';
-console.log('image host', imagehost);
+import styles from '../commons/styles/Home';
+
+const defaultVehicle = require('../commons/assets/images/car-default.jpg');
+
 const Home = ({navigation}) => {
   const [search, setSearch] = useState('');
   const user = useSelector(state => state.auth.userData);
@@ -194,6 +197,10 @@ const Home = ({navigation}) => {
                       <Image
                         source={{uri: imagehost + element.image}}
                         style={styles.cardVehicles}
+                        onError={({currentTarget}) => {
+                          currentTarget.onerror = null;
+                          currentTarget.src = {defaultVehicle};
+                        }}
                       />
                     </TouchableOpacity>
                   );

@@ -3,19 +3,20 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
-import {Header} from 'react-native/Libraries/NewAppScreen';
+// import {Header} from 'react-native/Libraries/NewAppScreen';
 import Home from './screens/Home';
 import Profile from './screens/Profile';
 import Login from './screens/Login';
 import SignUp from './screens/SignUp';
 import DetailVehicle from './screens/DetailVehicle';
-import {NavigationContainer} from '@react-navigation/native';
+// import {NavigationContainer} from '@react-navigation/native';
 import History from './screens/History';
 import DetailHistory from './screens/DetailHistory';
 import Chat from './screens/Chat';
 import {Image, StyleSheet, View} from 'react-native';
 import VehicleCategory from './screens/VehicleCategory';
 import UpdateProfile from './screens/UpdateProfile';
+import UpdateVehicle from './screens/UpdateVehicle';
 import SearchVehicle from './screens/SearchVehicle';
 import Transaction1 from './screens/Transaction1';
 import Transaction2 from './screens/Transaction2';
@@ -23,6 +24,9 @@ import Transaction3 from './screens/Transaction3';
 import AddVehicle from './screens/AddVehicle';
 import ChangePassword from './screens/ChangePassword';
 import SearchFilter from './screens/SearchFilter';
+import Favourite from './screens/Favourite';
+import ChatDetail from './screens/ChatDetail';
+import SplashScreen from './screens/SplashScreen';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -31,14 +35,14 @@ const iconHistory = require('../src/commons/assets/icons/history.png');
 const iconChat = require('../src/commons/assets/icons/chat.png');
 const iconProfile = require('../src/commons/assets/icons/profile.png');
 
-const Auth = () => (
-  <Stack.Navigator screenOptions={{headerShown: false}}>
-    <Stack.Screen name="login" component={Login} />
-    <Stack.Screen name="HomeAuth" component={Home} />
-    <Stack.Screen name="SignUpAuth" component={SignUp} />
-    <Stack.Screen name="ForgetPasswordAuth" component={Login} />
-  </Stack.Navigator>
-);
+// const Auth = () => (
+//   <Stack.Navigator screenOptions={{headerShown: false}}>
+//     <Stack.Screen name="login" component={Login} />
+//     <Stack.Screen name="HomeAuth" component={Home} />
+//     <Stack.Screen name="SignUpAuth" component={SignUp} />
+//     <Stack.Screen name="ForgetPasswordAuth" component={Login} />
+//   </Stack.Navigator>
+// );
 
 const HomeTab = () => {
   return (
@@ -65,6 +69,7 @@ const HomeTab = () => {
         name="VehicleCategory"
         component={VehicleCategory}
       />
+      <Stack.Screen name="UpdateVehicle" component={UpdateVehicle} />
     </Stack.Navigator>
   );
 };
@@ -93,6 +98,15 @@ const ChatTab = () => {
         }}
         // screenOptions={{headerShown: true}}
       />
+      <Stack.Screen
+        name="ChatDetail"
+        component={ChatDetail}
+        options={{
+          title: 'User 1',
+          headerShown: true,
+        }}
+        // screenOptions={{headerShown: true}}
+      />
     </Stack.Navigator>
   );
 };
@@ -109,7 +123,12 @@ const ProfileTab = () => {
       <Stack.Screen
         name="ChangePassword"
         component={ChangePassword}
-        options={{title: 'Change Password', headerShown: true}}
+        options={{title: 'Update Password', headerShown: true}}
+      />
+      <Stack.Screen
+        name="Favourite"
+        component={Favourite}
+        options={{title: 'Your Favourite', headerShown: true}}
       />
     </Stack.Navigator>
   );
@@ -224,6 +243,7 @@ const Router = () => (
   <Stack.Navigator screenOptions={{headerShown: false}}>
     <Stack.Screen name="StackTab" component={StackTab} />
     <Stack.Screen name="Login" component={Login} />
+    <Stack.Screen name="SplashScreen" component={SplashScreen} />
     <Stack.Screen
       name="Transaction1"
       component={Transaction1}

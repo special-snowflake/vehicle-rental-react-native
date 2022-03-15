@@ -8,6 +8,7 @@ import {
   Modal,
   ActivityIndicator,
   PermissionsAndroid,
+  ToastAndroid,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
@@ -20,6 +21,7 @@ import styles from '../commons/styles/AddVehicle';
 import modalStyle from '../commons/styles/Modals';
 import {useSelector} from 'react-redux';
 import {addVehicleFetch} from '../modules/utils/vehicles';
+import {customToast} from '../modules/helpers/toast';
 
 const defaultImage = require('../commons/assets/images/car-default.jpg');
 
@@ -125,13 +127,14 @@ const AddVehicle = ({navigation}) => {
     body.append('city_id', selectedCity);
     body.append('category_id', selectedCategory);
     body.append('stock', stock);
+    body.append('description', description);
     body.append('status', 'Available');
-    console.log('body', body);
     addVehicleFetch(body, user.token)
       .then(res => {
         setIsFetching(false);
         console.log('success', res);
         if (res.ok) {
+          customToast(ToastAndroid, 'Vehicle Added');
           return res.json();
         }
       })
@@ -141,6 +144,7 @@ const AddVehicle = ({navigation}) => {
       })
       .catch(e => {
         setIsFetching(false);
+        customToast(ToastAndroid, 'Vehicle Add Failed');
         console.log('error', e);
       })
       .done();
@@ -156,6 +160,15 @@ const AddVehicle = ({navigation}) => {
   };
 
   useEffect(() => {
+    console.log(
+      name,
+      price,
+      selectedImage,
+      description,
+      selectedCity,
+      selectedCategory,
+      stock,
+    );
     if (
       name !== null &&
       name !== '' &&

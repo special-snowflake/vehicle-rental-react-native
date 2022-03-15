@@ -6,6 +6,7 @@ import {
   ImageBackground,
   Image,
   TouchableOpacity,
+  ToastAndroid,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import style from '../commons/styles/DetailVehicle';
@@ -16,6 +17,7 @@ const defaultCar = require('../commons/assets/images/car-default.jpg');
 
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import {Picker} from '@react-native-picker/picker';
+import {customToast} from '../modules/helpers/toast';
 
 const imagehost = process.env.URL_API + '/vehicles';
 
@@ -28,9 +30,6 @@ const DetailVehicle = ({navigation, route}) => {
   const [image, setImage] = useState(defaultCar);
   const [counter, setCounter] = useState(1);
   const user = useSelector(state => state.auth.userData);
-
-  // const [open, setOpen] = useState(false);
-  // const [date, setDate] = useState(new Date());
 
   const today = new Date();
   console.log('today', today);
@@ -60,7 +59,8 @@ const DetailVehicle = ({navigation, route}) => {
     getVehicleDetail(route.params)
       .then(res => {
         setDataVehicle(res.data.data);
-        const newImage = imagehost + res.data.data.images[0];
+        const newImage =
+          imagehost + res.data.data.images[res.data.data.images.length - 1];
         console.log('uri:image');
         setImage({uri: newImage});
         console.log(res.data.data);
@@ -104,17 +104,39 @@ const DetailVehicle = ({navigation, route}) => {
                 onPress={() => {
                   navigation.navigate('Chat');
                 }}
-                style={{width: 30}}>
+                style={style.w30}>
                 <Image
                   source={require('../commons/assets/icons/chat.png')}
-                  style={{width: 30, height: 30}}
+                  style={style.wh30}
                 />
               </TouchableOpacity>
             </View>
           </View>
           <View style={style.contentWrapper}>
-            <Text>{dataVehicle.description}</Text>
-            <Text style={{color: 'green'}}>{dataVehicle.status}</Text>
+            <Text style={style.description}>{dataVehicle.description}</Text>
+            <Text style={style.textGreen}>{dataVehicle.status}</Text>
+          </View>
+          <View style={style.contentIcon}>
+            <View style={style.contentIconLeft}>
+              <Image
+                source={require('../commons/assets/icons/pin.png')}
+                style={style.iconImg}
+              />
+            </View>
+            <View style={style.contentIconRight}>
+              <Text style={style.textIcon}>{dataVehicle.city}, Indonesia</Text>
+            </View>
+          </View>
+          <View style={style.contentIcon}>
+            <View style={style.contentIconLeft}>
+              <Image
+                source={require('../commons/assets/icons/distance.png')}
+                style={style.iconImg}
+              />
+            </View>
+            <View style={style.contentIconRight}>
+              <Text style={style.textIcon}>3.7 KM from your location </Text>
+            </View>
           </View>
           <View style={style.headerWrapper}>
             <View style={style.itemLeft}>
@@ -147,10 +169,10 @@ const DetailVehicle = ({navigation, route}) => {
           </View>
           {user.token === '' || !user.token ? (
             <>
-              <Text style={{marginTop: 15, textAlign: 'center', fontSize: 16}}>
+              <Text style={style.loginSuggestion}>
                 You need to login to make a reservation
               </Text>
-              <View style={{padding: 10, marginTop: 20}}>
+              <View style={style.pmt30}>
                 <TouchableOpacity
                   style={style.buttonYellow}
                   onPress={() => {
@@ -197,23 +219,28 @@ const DetailVehicle = ({navigation, route}) => {
                   onCancel={() => setShowDate(false)}
                 />
               </View>
-              <View style={{padding: 10, marginTop: 20}}>
+              <View style={{padding: 10, marginTop: 20, marginBottom: 80}}>
                 <TouchableOpacity
                   style={style.buttonYellow}
                   onPress={() => {
-                    let param = {
-                      counter,
-                      day,
-                      startDate: String(selectedDate),
-                      dataVehicle,
-                    };
-                    let endDate = selectedDate;
-                    endDate.setDate(endDate.getDate() + day);
-                    param = {...param, endDate: String(endDate)};
-                    console.log(param);
-                    // const tmp = new Date(String(endDate));
-                    // console.log('tmp', tmp.getFullYear);
-                    navigation.navigate('Transaction1', param);
+                    if (selectedDate) {
+                      let param = {
+                        counter,
+                        day,
+                        startDate: String(selectedDate),
+                        dataVehicle,
+                      };
+                      let endDate = selectedDate;
+                      endDate.setDate(endDate.getDate() + day);
+                      param = {...param, endDate: String(endDate)};
+                      console.log(param);
+                      navigation.navigate('Transaction1', param);
+                    } else {
+                      customToast(
+                        ToastAndroid,
+                        'Please Select Date and Day to Continue',
+                      );
+                    }
                   }}>
                   <Text style={style.buttonText}>Reservation</Text>
                 </TouchableOpacity>
@@ -223,8 +250,12 @@ const DetailVehicle = ({navigation, route}) => {
             <></>
           )}
           {user.id && user.id === dataVehicle.user_id ? (
-            <View style={{padding: 10, marginTop: 20}}>
-              <TouchableOpacity style={style.buttonYellow}>
+            <View style={style.updateItemWrapper}>
+              <TouchableOpacity
+                style={style.buttonYellow}
+                onPress={() => {
+                  navigation.navigate('UpdateVehicle', dataVehicle);
+                }}>
                 <Text style={style.buttonText}>Update Item</Text>
               </TouchableOpacity>
             </View>

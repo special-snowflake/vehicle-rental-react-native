@@ -23,6 +23,19 @@ export const addVehicleFetch = async (body, token) => {
   });
   return res;
 };
+export const updateVehicleFetch = async (id, body, token) => {
+  const updateUrl = url + `/${id}`;
+  console.log('fetch body, token, url', body, token, updateUrl);
+  const res = await fetch(updateUrl, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      'x-authorized-token': token,
+    },
+    body: body,
+  });
+  return res;
+};
 
 export const getVehicleDetail = id => {
   const detailUrl = url + `/detail/${id}`;

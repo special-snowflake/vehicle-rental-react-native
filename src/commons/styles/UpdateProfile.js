@@ -52,6 +52,11 @@ const styles = StyleSheet.create({
     borderRadius: 7,
     marginBottom: 20,
   },
+  inputDate: {
+    position: 'relative',
+  },
+  pv5: {paddingVertical: 5},
+  iconCalendar: {position: 'absolute', left: 'auto', right: 10, top: 15},
   buttonSave: {
     display: 'flex',
     flexDirection: 'row',

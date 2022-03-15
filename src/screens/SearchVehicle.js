@@ -112,7 +112,7 @@ const SearchVehicle = ({navigation, route}) => {
             searchHandler();
           }}>
           <Image
-            source={require('../commons/assets/icons/search.png')}
+            source={require('../commons/assets/icons/search-black.png')}
             style={styles.wh25}
           />
         </TouchableOpacity>
@@ -127,6 +127,7 @@ const SearchVehicle = ({navigation, route}) => {
           />
           <Text style={styles.filterText}>Filter Search</Text>
         </TouchableOpacity>
+        <View style={styles.hr} />
       </View>
       {!isLoading ? (
         <View style={styles.p15}>

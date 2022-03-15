@@ -19,12 +19,14 @@ import modalStyle from '../commons/styles/Modals';
 import {getUserDetail} from '../modules/utils/user';
 import {capitalizeFirstLetter} from '../modules/helpers/collection';
 import {customToast} from '../modules/helpers/toast';
+import {useIsFocused} from '@react-navigation/native';
 
 const defaultUser = require('../commons/assets/images/defaultSmall.jpg');
 const imagehost = process.env.URL_API + '/user';
 
 const Profile = ({navigation}) => {
   const user = useSelector(state => state.auth.userData);
+  const isFocused = useIsFocused();
   const [showModal, setShowModal] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
   const [image, setImage] = useState(defaultUser);
@@ -59,6 +61,11 @@ const Profile = ({navigation}) => {
       getUserInfo();
     }
   }, [user]);
+  useEffect(() => {
+    if (user.token && user.token !== '') {
+      getUserInfo();
+    }
+  }, [isFocused]);
   return (
     <>
       {user && user.token && user.token !== '' ? (
@@ -81,10 +88,16 @@ const Profile = ({navigation}) => {
                 </View>
                 <View style={style.nameWrapper}>
                   <Text style={style.name}>{userInfo.full_name}</Text>
-                  <Text>{capitalizeFirstLetter(user.roles)}</Text>
+                  <Text style={style.fs16}>
+                    {capitalizeFirstLetter(user.roles)}
+                  </Text>
                 </View>
               </View>
-              <View style={style.menuWrapper}>
+              <TouchableOpacity
+                style={style.menuWrapper}
+                onPress={() => {
+                  navigation.navigate('Favourite');
+                }}>
                 <View style={style.menuText}>
                   <Text style={style.menuTextContent}>Your favourite</Text>
                 </View>
@@ -96,8 +109,12 @@ const Profile = ({navigation}) => {
                     style={style.menuImage}
                   />
                 </View>
-              </View>
-              <View style={style.menuWrapper}>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={style.menuWrapper}
+                onPress={() => {
+                  navigation.navigate('SplashScreen');
+                }}>
                 <View style={style.menuText}>
                   <Text style={style.menuTextContent}>FAQ</Text>
                 </View>
@@ -109,7 +126,7 @@ const Profile = ({navigation}) => {
                     style={style.menuImage}
                   />
                 </View>
-              </View>
+              </TouchableOpacity>
               <View style={style.menuWrapper}>
                 <View style={style.menuText}>
                   <Text style={style.menuTextContent}>Help</Text>
@@ -129,7 +146,7 @@ const Profile = ({navigation}) => {
                 }}>
                 <View style={style.menuWrapper}>
                   <View style={style.menuText}>
-                    <Text style={style.menuTextContent}>Change Password</Text>
+                    <Text style={style.menuTextContent}>Update Password</Text>
                   </View>
                   <View style={style.menuImageWrapper}>
                     <Image
