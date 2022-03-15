@@ -26,7 +26,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginVertical: 10,
   },
-  previewText: {fontSize: 15, fontWeight: 'bold'},
+  previewText: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    flex: 5,
+  },
   indicatorChat: {
     display: 'flex',
     justifyContent: 'center',
@@ -35,6 +39,7 @@ const styles = StyleSheet.create({
     height: 30,
     borderRadius: 30 / 2,
     backgroundColor: '#FFCD61',
+    // flex: 2,
   },
   endOfList: {textAlign: 'center', marginTop: 50, fontSize: 15},
 });

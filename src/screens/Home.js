@@ -17,6 +17,7 @@ import {searchVehicle} from '../modules/utils/vehicles';
 
 const imagehost = process.env.URL_API + '/vehicles';
 import styles from '../commons/styles/Home';
+import HomeCard from '../commons/components/HomeCard';
 
 const defaultVehicle = require('../commons/assets/images/car-default.jpg');
 
@@ -127,16 +128,11 @@ const Home = ({navigation}) => {
                 showsHorizontalScrollIndicator={false}>
                 {listVehicles.dataCar.map(element => {
                   return (
-                    <TouchableOpacity
-                      key={`car-${element.id}`}
-                      onPress={() => {
-                        navigation.navigate('DetailVehicle', element.id);
-                      }}>
-                      <Image
-                        source={{uri: imagehost + element.image}}
-                        style={styles.cardVehicles}
-                      />
-                    </TouchableOpacity>
+                    <HomeCard
+                      navigation={navigation}
+                      id={element.id}
+                      image={element.image}
+                    />
                   );
                 })}
               </ScrollView>
@@ -153,12 +149,7 @@ const Home = ({navigation}) => {
                   View More
                 </Text>
               </View>
-              <ScrollView
-                horizontal={true}
-                showsHorizontalScrollIndicator={false}>
-                {listVehicles.dataMotorCycle.map(element => {
-                  return (
-                    <TouchableOpacity
+              {/* <TouchableOpacity
                       key={`motor-${element.id}`}
                       onPress={() => {
                         navigation.navigate('DetailVehicle', element.id);
@@ -167,7 +158,17 @@ const Home = ({navigation}) => {
                         source={{uri: imagehost + element.image}}
                         style={styles.cardVehicles}
                       />
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
+              <ScrollView
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}>
+                {listVehicles.dataMotorCycle.map(element => {
+                  return (
+                    <HomeCard
+                      navigation={navigation}
+                      id={element.id}
+                      image={element.image}
+                    />
                   );
                 })}
               </ScrollView>
@@ -184,12 +185,7 @@ const Home = ({navigation}) => {
                   View More
                 </Text>
               </View>
-              <ScrollView
-                horizontal={true}
-                showsHorizontalScrollIndicator={false}>
-                {listVehicles.dataBike.map(element => {
-                  return (
-                    <TouchableOpacity
+              {/* <TouchableOpacity
                       key={`bike-${element.id}`}
                       onPress={() => {
                         navigation.navigate('DetailVehicle', element.id);
@@ -202,7 +198,17 @@ const Home = ({navigation}) => {
                           currentTarget.src = {defaultVehicle};
                         }}
                       />
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
+              <ScrollView
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}>
+                {listVehicles.dataBike.map(element => {
+                  return (
+                    <HomeCard
+                      navigation={navigation}
+                      id={element.id}
+                      image={element.image}
+                    />
                   );
                 })}
               </ScrollView>

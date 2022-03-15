@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
   },
-  contentImage: {height: 90, width: 120, borderRadius: 10},
+  contentImage: {height: 90, width: '90%', borderRadius: 10},
   checkboxWrapper: {
     flex: 1,
     display: 'flex',
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   },
   pageWrapper: {
     marginTop: 10,
-    marginBottom: 20,
+    marginBottom: 30,
     flexDirection: 'row',
     justifyContent: 'center',
     flexWrap: 'wrap',

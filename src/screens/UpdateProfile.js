@@ -6,6 +6,8 @@ import {
   TextInput,
   TouchableOpacity,
   ToastAndroid,
+  Modal,
+  PermissionsAndroid,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {RadioButton} from 'react-native-paper';
@@ -17,6 +19,8 @@ import {useSelector} from 'react-redux';
 import {updateUsingFetch} from '../modules/utils/user';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import {customToast} from '../modules/helpers/toast';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import modalStyle from '../commons/styles/Modals';
 
 const UpdateProfile = ({navigation, route: {params}}) => {
   const formatDOB = params.userInfo.dob.slice(0, 10);
@@ -24,6 +28,7 @@ const UpdateProfile = ({navigation, route: {params}}) => {
   const [email, setEmail] = useState(null);
   const [phone, setPhone] = useState(null);
   const [userInfo, setUserInfo] = useState(params.userInfo);
+  const [showModal, setShowModal] = useState(false);
   const [image, setImage] = useState(defaultImage);
   const [selectedImage, setSelectedImage] = useState(null);
   const [checked, setChecked] = useState(params.userInfo.sex);
@@ -34,6 +39,58 @@ const UpdateProfile = ({navigation, route: {params}}) => {
   useEffect(() => {
     console.log('ui', userInfo);
   });
+  const options = {
+    storageOptions: {
+      path: 'images',
+      mediaType: 'photo',
+    },
+    includeBase64: false,
+  };
+  const openImageLibrary = () => {
+    launchImageLibrary(options, response => {
+      console.log('Response = ', response);
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      } else {
+        setSelectedImage(response.assets[0]);
+        const source = {uri: response.assets[0].uri};
+        setImage(source);
+      }
+    });
+  };
+  const openCamera = async () => {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.CAMERA,
+      {
+        title: 'App Camera Permission',
+        message: 'App needs access to your camera',
+        buttonNeutral: 'Ask Me Later',
+        buttonNegative: 'Cancel',
+        buttonPositive: 'OK',
+      },
+    );
+    console.log('permission camera:', granted);
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      launchCamera(options, response => {
+        console.log('Response = ', response);
+        if (response.didCancel) {
+          console.log('User cancelled image picker');
+        } else if (response.error) {
+          console.log('ImagePicker Error: ', response.error);
+        } else if (response.customButton) {
+          console.log('User tapped custom button: ', response.customButton);
+        } else {
+          setSelectedImage(response.assets[0]);
+          const source = {uri: response.assets[0].uri};
+          setImage(source);
+        }
+      });
+    }
+  };
   const uploadImage = () => {
     console.log('edit image');
     const res = DocumentPicker.pick({
@@ -136,7 +193,7 @@ const UpdateProfile = ({navigation, route: {params}}) => {
           <View style={style.buttonWrapper}>
             <TouchableOpacity
               onPress={() => {
-                uploadImage();
+                setShowModal(true);
               }}>
               <Image
                 source={require('../commons/assets/icons/pencil.png')}
@@ -221,6 +278,50 @@ const UpdateProfile = ({navigation, route: {params}}) => {
         }}>
         <Text style={style.textButton}>Save Change</Text>
       </TouchableOpacity>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={showModal}
+        onRequestClose={() => {
+          console.log('Modal has been closed.');
+          setShowModal(false);
+        }}>
+        <View style={modalStyle.modalCoverBottom}>
+          <View style={modalStyle.modalContentBottom}>
+            <View style={modalStyle.buttonWrapper}>
+              <TouchableOpacity
+                style={modalStyle.buttonPrimary}
+                onPress={() => {
+                  openCamera();
+                  setShowModal(false);
+                }}>
+                <Text style={modalStyle.textBtnPrimary}>Use Camera</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={modalStyle.buttonWrapper}>
+              <TouchableOpacity
+                style={modalStyle.buttonPrimary}
+                onPress={() => {
+                  openImageLibrary();
+                  setShowModal(false);
+                }}>
+                <Text style={modalStyle.textBtnPrimary}>
+                  Choose From Gallery
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <View style={modalStyle.buttonWrapper}>
+              <TouchableOpacity
+                style={modalStyle.buttonSecondary}
+                onPress={() => {
+                  setShowModal(false);
+                }}>
+                <Text style={modalStyle.textBtnSecondary}>Cancel</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
   );
 };

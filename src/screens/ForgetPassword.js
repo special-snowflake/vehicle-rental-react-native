@@ -16,7 +16,7 @@ import {loginAction} from '../redux/actions/auth';
 import {customToast} from '../modules/helpers/toast';
 import {useIsFocused} from '@react-navigation/native';
 
-const Login = props => {
+const ForgetPassword = props => {
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
@@ -53,46 +53,40 @@ const Login = props => {
   return (
     <ScrollView>
       <ImageBackground
-        source={require('../commons/assets/images/background-login.jpg')}
+        source={require('../commons/assets/images/background-forget-password.jpg')}
         style={styles.background}>
         <View style={styles.main}>
           <View style={styles.headerWrapper}>
-            <Text style={styles.header}>LET'S EXPLORE</Text>
-            <Text style={styles.header}>THE WORLD</Text>
+            <Text style={styles.header}>THAT'S OKAY</Text>
+            <Text style={styles.header}>WE GOT YOUR BACK</Text>
           </View>
           <View style={styles.inputWrapper}>
+            <Text
+              style={{
+                fontSize: 15,
+                color: '#FFFF',
+                marginBottom: 10,
+                textAlign: 'center',
+              }}>
+              Enter your email to get reset password code. If you don't have any
+              code.{' '}
+              <Text
+                style={{
+                  fontWeight: 'bold',
+                  textDecorationLine: 'underline',
+                  textDecorationColor: '#FFFF',
+                }}>
+                Resend Code
+              </Text>
+            </Text>
             <TextInput
               style={styles.inputForm}
-              placeholder="Email"
+              placeholder="Enter Your Email Address"
               onChange={text => {
                 setEmail(text.nativeEvent.text);
               }}
             />
-            <View style={{...styles.inputForm, ...styles.inputPassword}}>
-              <TextInput
-                placeholder="Password"
-                secureTextEntry={!showPassword}
-                onChange={text => {
-                  setPassword(text.nativeEvent.text);
-                }}
-              />
-              <TouchableOpacity
-                style={styles.showWrapper}
-                onPress={() => {
-                  setShowPassword(!showPassword);
-                }}>
-                <Text style={styles.showButton}>
-                  {showPassword ? 'Hide' : 'Show'}
-                </Text>
-              </TouchableOpacity>
-            </View>
-            <Text
-              style={styles.forget}
-              onPress={() => {
-                navigation.navigate('ForgetPassword');
-              }}>
-              Forget Password?
-            </Text>
+            {/* <Text style={styles.forget}>Forget Password?</Text> */}
             <TouchableOpacity
               style={styles.btnYellow}
               onPress={() => {
@@ -142,4 +136,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(Login);
+export default connect(mapStateToProps)(ForgetPassword);

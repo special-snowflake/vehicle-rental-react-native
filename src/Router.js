@@ -26,6 +26,7 @@ import ChangePassword from './screens/ChangePassword';
 import SearchFilter from './screens/SearchFilter';
 import Favourite from './screens/Favourite';
 import ChatDetail from './screens/ChatDetail';
+import ForgetPassword from './screens/ForgetPassword';
 import SplashScreen from './screens/SplashScreen';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -243,6 +244,7 @@ const Router = () => (
   <Stack.Navigator screenOptions={{headerShown: false}}>
     <Stack.Screen name="StackTab" component={StackTab} />
     <Stack.Screen name="Login" component={Login} />
+    <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
     <Stack.Screen name="SplashScreen" component={SplashScreen} />
     <Stack.Screen
       name="Transaction1"
