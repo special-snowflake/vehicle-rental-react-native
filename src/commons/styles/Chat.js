@@ -42,5 +42,19 @@ const styles = StyleSheet.create({
     // flex: 2,
   },
   endOfList: {textAlign: 'center', marginTop: 50, fontSize: 15},
+  buttonYellow: {
+    backgroundColor: '#FFCD61',
+    padding: 15,
+    borderRadius: 10,
+    marginHorizontal: 15,
+    marginVertical: 10,
+  },
+  textButtonYellow: {
+    color: '#393939',
+    textAlign: 'center',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  loginInfo: {textAlign: 'center', fontSize: 18, marginVertical: 50},
 });
 export default styles;

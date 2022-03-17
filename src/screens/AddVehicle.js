@@ -62,6 +62,26 @@ const AddVehicle = ({navigation}) => {
     },
     includeBase64: false,
   };
+  const resposeFileController = response => {
+    const size = response.assets[0].fileSize;
+    const type = response.assets[0].type;
+    if (size < 2 * 1024 * 1024) {
+      if (
+        type === 'image/png' ||
+        type === 'image/jpg' ||
+        type === 'image/jpeg'
+      ) {
+        setSelectedImage(response.assets[0]);
+        const source = {uri: response.assets[0].uri};
+        setImage(source);
+      } else {
+        customToast(ToastAndroid, 'Invalid image format');
+      }
+    } else {
+      customToast(ToastAndroid, 'File is too large');
+    }
+  };
+
   const openImageLibrary = () => {
     launchImageLibrary(options, response => {
       console.log('Response = ', response);
@@ -72,9 +92,7 @@ const AddVehicle = ({navigation}) => {
       } else if (response.customButton) {
         console.log('User tapped custom button: ', response.customButton);
       } else {
-        setSelectedImage(response.assets[0]);
-        const source = {uri: response.assets[0].uri};
-        setImage(source);
+        resposeFileController(response);
       }
     });
   };
@@ -100,9 +118,7 @@ const AddVehicle = ({navigation}) => {
         } else if (response.customButton) {
           console.log('User tapped custom button: ', response.customButton);
         } else {
-          setSelectedImage(response.assets[0]);
-          const source = {uri: response.assets[0].uri};
-          setImage(source);
+          resposeFileController(response);
         }
       });
     }
@@ -240,6 +256,7 @@ const AddVehicle = ({navigation}) => {
             <TextInput
               placeholder="Type product price"
               style={styles.inputCenter}
+              keyboardType="number-pad"
               onChange={text => {
                 setPrice(text.nativeEvent.text);
               }}
@@ -263,6 +280,9 @@ const AddVehicle = ({navigation}) => {
                 setSelectedCity(itemValue);
               }}>
               {listCity.map((element, idx) => {
+                if (idx === 0) {
+                  setSelectedCity(element.id);
+                }
                 return (
                   <Picker.Item
                     label={element.city}
@@ -283,6 +303,9 @@ const AddVehicle = ({navigation}) => {
                 setSelectedCategory(itemValue);
               }}>
               {listCategory.map((element, idx) => {
+                if (idx === 0) {
+                  setSelectedCategory(element.id);
+                }
                 return (
                   <Picker.Item
                     label={element.category}

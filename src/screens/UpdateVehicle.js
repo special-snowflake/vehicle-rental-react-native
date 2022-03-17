@@ -45,6 +45,27 @@ const DetailVehicle = ({navigation, route}) => {
     },
     includeBase64: false,
   };
+
+  const resposeFileController = response => {
+    const size = response.assets[0].fileSize;
+    const type = response.assets[0].type;
+    if (size < 2 * 1024 * 1024) {
+      if (
+        type === 'image/png' ||
+        type === 'image/jpg' ||
+        type === 'image/jpeg'
+      ) {
+        setSelectedImage(response.assets[0]);
+        const source = {uri: response.assets[0].uri};
+        setImage(source);
+      } else {
+        customToast(ToastAndroid, 'Invalid image format');
+      }
+    } else {
+      customToast(ToastAndroid, 'File is too large');
+    }
+  };
+
   const openImageLibrary = () => {
     launchImageLibrary(options, response => {
       console.log('Response = ', response);
@@ -55,9 +76,10 @@ const DetailVehicle = ({navigation, route}) => {
       } else if (response.customButton) {
         console.log('User tapped custom button: ', response.customButton);
       } else {
-        setSelectedImage(response.assets[0]);
-        const source = {uri: response.assets[0].uri};
-        setImage(source);
+        resposeFileController(response);
+        // setSelectedImage(response.assets[0]);
+        // const source = {uri: response.assets[0].uri};
+        // setImage(source);
       }
     });
   };
@@ -83,9 +105,10 @@ const DetailVehicle = ({navigation, route}) => {
         } else if (response.customButton) {
           console.log('User tapped custom button: ', response.customButton);
         } else {
-          setSelectedImage(response.assets[0]);
-          const source = {uri: response.assets[0].uri};
-          setImage(source);
+          resposeFileController(response);
+          // setSelectedImage(response.assets[0]);
+          // const source = {uri: response.assets[0].uri};
+          // setImage(source);
         }
       });
     }

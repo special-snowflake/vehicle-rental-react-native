@@ -41,6 +41,18 @@ const styles = StyleSheet.create({
     padding: 5,
     borderRadius: 5,
   },
+  favButton: {
+    position: 'absolute',
+    top: 10,
+    left: 'auto',
+    right: 10,
+    width: 30,
+    height: 30,
+    zIndex: 5,
+    backgroundColor: '#39393980',
+    padding: 5,
+    borderRadius: 5,
+  },
   editButton: {
     top: 'auto',
     left: 'auto',
@@ -141,7 +153,7 @@ const styles = StyleSheet.create({
   updateItemWrapper: {padding: 10, marginTop: 20, marginBottom: 80},
   w30: {width: 30},
   wh30: {width: 30, height: 30},
-  pmt30: {padding: 10, marginTop: 20},
+  pmt30: {padding: 10, marginTop: 20, marginBottom: 75},
   textGreen: {color: 'green', fontSize: 16},
   description: {fontSize: 16},
   contentIcon: {
@@ -149,7 +161,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: 15,
   },
-  loginSuggestion: {marginTop: 15, textAlign: 'center', fontSize: 16},
+  loginSuggestion: {
+    marginTop: 15,
+    textAlign: 'center',
+    fontSize: 16,
+  },
   contentIconLeft: {flex: 1},
   iconImg: {width: 45, height: 45},
   contentIconRight: {

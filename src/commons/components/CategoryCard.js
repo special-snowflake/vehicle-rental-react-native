@@ -5,7 +5,7 @@ import {numberToRupiah} from '../../modules/helpers/collection';
 // import {} from 'react-native-gesture-handler';
 
 const imagehost = process.env.URL_API + '/vehicles';
-
+const defaultVehicle = require('../assets/images/car-default.jpg');
 const CategoryCard = ({navigation, data}) => {
   const elements = [];
   if (data.length === 0) {
@@ -28,6 +28,10 @@ const CategoryCard = ({navigation, data}) => {
             <Image
               source={{uri: uriImage}}
               style={style.image}
+              onError={({currentTarget}) => {
+                currentTarget.onerror = null;
+                currentTarget.src = {defaultVehicle};
+              }}
               resizeMethod="resize"
               resizeMode="cover"
             />

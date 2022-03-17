@@ -4,6 +4,8 @@ import style from '../styles/Card';
 
 const host = process.env.URL_API;
 
+const defaultVehicle = require('../assets/images/car-default.jpg');
+
 const ListVehicle = data => {
   const elements = [];
   const list = data.data;
@@ -14,7 +16,14 @@ const ListVehicle = data => {
     // console.log(element.name, element.price, idx);
     elements.push(
       <View key={id}>
-        <Image source={{uri: image}} style={style.cardVehicles} />
+        <Image
+          source={{uri: image}}
+          style={style.cardVehicles}
+          onError={({currentTarget}) => {
+            currentTarget.onerror = null;
+            currentTarget.src = {defaultVehicle};
+          }}
+        />
       </View>,
     );
   });

@@ -13,9 +13,7 @@ const Transaction2 = ({navigation, route}) => {
   useEffect(() => {
     if (params.dataVehicle.images.length > 0) {
       const img = {
-        uri:
-          imghost +
-          params.dataVehicle.images[params.dataVehicle.images.length - 1],
+        uri: imghost + params.dataVehicle.images[0],
       };
       setImage(img);
     }

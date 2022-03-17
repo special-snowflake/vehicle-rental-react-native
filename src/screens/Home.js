@@ -15,23 +15,20 @@ import {useDispatch, useSelector} from 'react-redux';
 import {changeFilter} from '../redux/actions/filter';
 import {searchVehicle} from '../modules/utils/vehicles';
 
-const imagehost = process.env.URL_API + '/vehicles';
 import styles from '../commons/styles/Home';
 import HomeCard from '../commons/components/HomeCard';
-
-const defaultVehicle = require('../commons/assets/images/car-default.jpg');
 
 const Home = ({navigation}) => {
   const [search, setSearch] = useState('');
   const user = useSelector(state => state.auth.userData);
-  const filter = useSelector(state => state.filter);
+  // const filter = useSelector(state => state.filter);
   const [listVehicles, setListVehicles] = useState({
     dataBike: [],
     dataCar: [],
     dataMotorCycle: [],
     isSuccess: false,
   });
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   console.log('list vegicles', listVehicles);
   console.log('data user', user);
@@ -58,11 +55,11 @@ const Home = ({navigation}) => {
         console.log('error', err.response);
       });
   }, []);
-  const onSearch = () => {
-    let newFilter = {...filter, keyword: search};
-    dispatch(changeFilter(newFilter));
-    navigation.navigate('SearchVehicle');
-  };
+  // const onSearch = () => {
+  //   let newFilter = {...filter, keyword: search};
+  //   dispatch(changeFilter(newFilter));
+  //   navigation.navigate('SearchVehicle');
+  // };
   return (
     <ScrollView style={{backgroundColor: 'white'}}>
       <View style={styles.jumboTronWrapper}>
@@ -132,6 +129,8 @@ const Home = ({navigation}) => {
                       navigation={navigation}
                       id={element.id}
                       image={element.image}
+                      category={'Car'}
+                      key={`car-${element.id}`}
                     />
                   );
                 })}
@@ -168,6 +167,8 @@ const Home = ({navigation}) => {
                       navigation={navigation}
                       id={element.id}
                       image={element.image}
+                      category={'MotorCycle'}
+                      key={`motor-${element.id}`}
                     />
                   );
                 })}
@@ -208,6 +209,8 @@ const Home = ({navigation}) => {
                       navigation={navigation}
                       id={element.id}
                       image={element.image}
+                      category={'Bike'}
+                      key={`bike-${element.id}`}
                     />
                   );
                 })}

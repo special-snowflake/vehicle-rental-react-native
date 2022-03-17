@@ -1,8 +1,8 @@
-export const customToast = (ToastAndroid, msg, x = 25, y = 50) => {
+export const customToast = (ToastAndroid, msg, x = 50, y = 50) => {
   return ToastAndroid.showWithGravityAndOffset(
     msg,
     ToastAndroid.SHORT,
-    ToastAndroid.TOP,
+    ToastAndroid.BOTTOM,
     x,
     y,
   );

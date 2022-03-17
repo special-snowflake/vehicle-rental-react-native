@@ -14,9 +14,12 @@ import modalStyle from '../commons/styles/Modals';
 import CardHistory from '../commons/components/CardHistory';
 import {customToast} from '../modules/helpers/toast';
 import {serialize} from '../modules/helpers/serialize';
+import {useIsFocused} from '@react-navigation/native';
 
 const History = ({navigation}) => {
   const user = useSelector(state => state.auth.userData);
+  const isFocused = useIsFocused();
+
   const [meta, setMeta] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState({
@@ -28,6 +31,7 @@ const History = ({navigation}) => {
 
   const [selectedItem, setSelectedItem] = useState([]);
   const [showModal, setShowModal] = useState(false);
+
   const callback = arr => {
     setSelectedItem(arr);
     console.log('arr callback', arr);
@@ -62,26 +66,55 @@ const History = ({navigation}) => {
     const getHistory = () => {
       const token = user.token;
       console.log(token);
-      const newFilter = '?' + serialize(filter);
-      searchHistory(newFilter, token)
-        .then(res => {
-          console.log(res.data.data, res.data.data.length);
-          setHistory(res.data.data);
-          setMeta(res.data.meta);
-          setSelectedItem([]);
-          setIsLoading(false);
-        })
-        .catch(err => {
-          console.log(err);
-          customToast(
-            ToastAndroid,
-            'Something went wrong, please try relogin.',
-          );
-        });
+      if (token !== '' && token) {
+        const newFilter = '?' + serialize(filter);
+        searchHistory(newFilter, token)
+          .then(res => {
+            console.log(res.data.data, res.data.data.length);
+            setHistory(res.data.data);
+            setMeta(res.data.meta);
+            setSelectedItem([]);
+            setIsLoading(false);
+          })
+          .catch(err => {
+            console.log(err);
+            customToast(
+              ToastAndroid,
+              'Something went wrong, please try relogin.',
+            );
+          });
+      }
     };
     setIsLoading(true);
     getHistory();
-  }, [filter, user.token]);
+  }, [filter, user.token, isFocused]);
+
+  // useEffect(() => {
+  //   const getHistory = () => {
+  //     const token = user.token;
+  //     console.log(token);
+  //     if (token !== '' && token) {
+  //       const newFilter = '?' + serialize(filter);
+  //       searchHistory(newFilter, token)
+  //         .then(res => {
+  //           console.log(res.data.data, res.data.data.length);
+  //           setHistory(res.data.data);
+  //           setMeta(res.data.meta);
+  //           setSelectedItem([]);
+  //           setIsLoading(false);
+  //         })
+  //         .catch(err => {
+  //           console.log(err);
+  //           customToast(
+  //             ToastAndroid,
+  //             'Something went wrong, please try relogin.',
+  //           );
+  //         });
+  //     }
+  //   };
+  //   setIsLoading(true);
+  //   getHistory();
+  // }, [isFocused]);
 
   return (
     <>

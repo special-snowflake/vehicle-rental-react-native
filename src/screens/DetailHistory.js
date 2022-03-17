@@ -19,7 +19,7 @@ const DetailHistory = ({navigation, route}) => {
   const user = useSelector(state => state.auth.userData);
   const [dataHistory, setDataHistory] = useState(null);
   const [image, setImage] = useState(defaultImage);
-
+  console.log('route:', route);
   console.log(route.params);
   useEffect(() => {
     const imagehost = process.env.URL_API + '/vehicles';

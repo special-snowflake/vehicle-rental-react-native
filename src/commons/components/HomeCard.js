@@ -3,11 +3,11 @@ import React, {useState} from 'react';
 const defaultVehicle = require('../assets/images/car-default.jpg');
 const imagehost = process.env.URL_API + '/vehicles';
 import styles from '../styles/Home';
-const HomeCard = ({navigation, id, image}) => {
+const HomeCard = ({navigation, id, image, category}) => {
   const [imageState, setImage] = useState({uri: imagehost + image});
   return (
     <TouchableOpacity
-      key={`key-${id}`}
+      // key={`${category}-${id}`}
       onPress={() => {
         navigation.navigate('DetailVehicle', id);
       }}>

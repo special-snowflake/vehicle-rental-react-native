@@ -18,13 +18,18 @@ const defaultCar = require('../commons/assets/images/car-default.jpg');
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import {Picker} from '@react-native-picker/picker';
 import {customToast} from '../modules/helpers/toast';
+import {useIsFocused} from '@react-navigation/native';
+import {addFavourtie} from '../modules/utils/favourite';
 
 const imagehost = process.env.URL_API + '/vehicles';
 
 const DetailVehicle = ({navigation, route}) => {
+  console.log('route:', route);
+  console.log(route.params);
   const [dataVehicle, setDataVehicle] = useState(null);
   const [showDate, setShowDate] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
+  const isFocused = useIsFocused();
   const [formatDate, setFormatDate] = useState(null);
   const [day, setDay] = useState(1);
   const [image, setImage] = useState(defaultCar);
@@ -34,10 +39,10 @@ const DetailVehicle = ({navigation, route}) => {
   const today = new Date();
   console.log('today', today);
   const handleDatePicker = value => {
+    setShowDate(false);
     console.log('A date has been picked: ', value);
     setSelectedDate(value);
     setFormatDate(grabLocalYMD(value));
-    setShowDate(false);
   };
 
   const handleCounter = val => {
@@ -55,18 +60,33 @@ const DetailVehicle = ({navigation, route}) => {
     }
   };
 
+  const handleAddFav = () => {
+    const body = {
+      vehicle_id: dataVehicle.id,
+    };
+    console.log('dataveh', dataVehicle, body);
+    addFavourtie(body, user.token)
+      .then(res => {
+        console.log('add fav', res);
+        customToast(ToastAndroid, 'Vehicle add to favourite');
+      })
+      .catch(err => {
+        console.log(err);
+        customToast(ToastAndroid, 'Failed to add vehicle to favourite');
+      });
+  };
+
   useEffect(() => {
     getVehicleDetail(route.params)
       .then(res => {
         setDataVehicle(res.data.data);
-        const newImage =
-          imagehost + res.data.data.images[res.data.data.images.length - 1];
+        const newImage = imagehost + res.data.data.images[0];
         console.log('uri:image');
         setImage({uri: newImage});
         console.log(res.data.data);
       })
       .catch();
-  }, [route]);
+  }, [route, isFocused]);
   return (
     <ScrollView style={style.container}>
       {dataVehicle ? (
@@ -84,6 +104,17 @@ const DetailVehicle = ({navigation, route}) => {
                 />
               </TouchableOpacity>
             </View>
+            {user.token && user.token !== '' ? (
+              <TouchableOpacity
+                style={style.favButton}
+                onPress={() => {
+                  handleAddFav();
+                }}>
+                <Text>♥</Text>
+              </TouchableOpacity>
+            ) : (
+              <></>
+            )}
             <ImageBackground
               source={image}
               style={style.jumboTron}

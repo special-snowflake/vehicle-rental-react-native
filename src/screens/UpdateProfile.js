@@ -8,6 +8,7 @@ import {
   ToastAndroid,
   Modal,
   PermissionsAndroid,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {RadioButton} from 'react-native-paper';
@@ -23,7 +24,8 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import modalStyle from '../commons/styles/Modals';
 
 const UpdateProfile = ({navigation, route: {params}}) => {
-  const formatDOB = params.userInfo.dob.slice(0, 10);
+  // const formatDOB = ;
+  const [isFetching, setIsFetching] = useState(false);
   const [name, setName] = useState(null);
   const [email, setEmail] = useState(null);
   const [phone, setPhone] = useState(null);
@@ -31,9 +33,11 @@ const UpdateProfile = ({navigation, route: {params}}) => {
   const [showModal, setShowModal] = useState(false);
   const [image, setImage] = useState(defaultImage);
   const [selectedImage, setSelectedImage] = useState(null);
-  const [checked, setChecked] = useState(params.userInfo.sex);
+  const [checked, setChecked] = useState(params.userInfo.sex || null);
   const [showDate, setShowDate] = useState(false);
-  const [selectedDoB, setSelectedDoB] = useState(formatDOB);
+  const [selectedDoB, setSelectedDoB] = useState(
+    params.userInfo.dob ? params.userInfo.dob.slice(0, 10) : null,
+  );
   const user = useSelector(state => state.auth.userData);
 
   useEffect(() => {
@@ -46,6 +50,27 @@ const UpdateProfile = ({navigation, route: {params}}) => {
     },
     includeBase64: false,
   };
+
+  const resposeFileController = response => {
+    const size = response.assets[0].fileSize;
+    const type = response.assets[0].type;
+    if (size < 2 * 1024 * 1024) {
+      if (
+        type === 'image/png' ||
+        type === 'image/jpg' ||
+        type === 'image/jpeg'
+      ) {
+        setSelectedImage(response.assets[0]);
+        const source = {uri: response.assets[0].uri};
+        setImage(source);
+      } else {
+        customToast(ToastAndroid, 'Invalid image format');
+      }
+    } else {
+      customToast(ToastAndroid, 'File is too large');
+    }
+  };
+
   const openImageLibrary = () => {
     launchImageLibrary(options, response => {
       console.log('Response = ', response);
@@ -56,12 +81,12 @@ const UpdateProfile = ({navigation, route: {params}}) => {
       } else if (response.customButton) {
         console.log('User tapped custom button: ', response.customButton);
       } else {
-        setSelectedImage(response.assets[0]);
-        const source = {uri: response.assets[0].uri};
-        setImage(source);
+        console.log('res get image', response);
+        resposeFileController(response);
       }
     });
   };
+
   const openCamera = async () => {
     const granted = await PermissionsAndroid.request(
       PermissionsAndroid.PERMISSIONS.CAMERA,
@@ -84,28 +109,10 @@ const UpdateProfile = ({navigation, route: {params}}) => {
         } else if (response.customButton) {
           console.log('User tapped custom button: ', response.customButton);
         } else {
-          setSelectedImage(response.assets[0]);
-          const source = {uri: response.assets[0].uri};
-          setImage(source);
+          resposeFileController(response);
         }
       });
     }
-  };
-  const uploadImage = () => {
-    console.log('edit image');
-    const res = DocumentPicker.pick({
-      type: [DocumentPicker.types.images],
-    })
-      .then(response => {
-        console.log(res);
-        console.log(response[0]);
-        const newImage = response[0].uri;
-        setImage({uri: newImage});
-        setSelectedImage(response[0]);
-      })
-      .catch(err => {
-        console.log(err);
-      });
   };
 
   useEffect(() => {
@@ -120,9 +127,6 @@ const UpdateProfile = ({navigation, route: {params}}) => {
     console.log('A date has been picked: ', date);
     const newDate = date.toISOString(date).slice(0, 10);
     console.log('newdate:', newDate, typeof newDate);
-    // const slicedDate =
-    // const n = date.slice(0, 9);
-    // console.log('A date : ', n);
     setSelectedDoB(newDate);
     setShowDate(false);
   };
@@ -130,11 +134,11 @@ const UpdateProfile = ({navigation, route: {params}}) => {
   const handleSaveChanges = () => {
     const body = new FormData();
     console.log('selected', selectedImage);
-    if (selectedImage !== null) {
+    if (selectedImage) {
       body.append('profilePicture', {
         uri: selectedImage.uri,
         type: selectedImage.type,
-        name: selectedImage.name,
+        name: selectedImage.fileName,
       });
     }
     if (name) {
@@ -153,6 +157,7 @@ const UpdateProfile = ({navigation, route: {params}}) => {
       body.append('dob', selectedDoB);
     }
     console.log('body', body);
+    setIsFetching(true);
     updateUsingFetch(body, user.token)
       .then(res => {
         if (res.ok) {
@@ -172,7 +177,9 @@ const UpdateProfile = ({navigation, route: {params}}) => {
         );
         console.log('error', e);
       })
-      .done();
+      .done(() => {
+        setIsFetching(true);
+      });
     console.log(body, user.token);
   };
   return (
@@ -208,13 +215,17 @@ const UpdateProfile = ({navigation, route: {params}}) => {
       <View style={style.radioWrapper}>
         <RadioButton
           value="f"
-          status={checked.toLowerCase() === 'f' ? 'checked' : 'unchecked'}
+          status={
+            checked && checked.toLowerCase() === 'f' ? 'checked' : 'unchecked'
+          }
           onPress={() => setChecked('F')}
         />
         <Text style={style.radioF}>Female</Text>
         <RadioButton
           value="m"
-          status={checked.toLowerCase() === 'm' ? 'checked' : 'unchecked'}
+          status={
+            checked && checked.toLowerCase() === 'm' ? 'checked' : 'unchecked'
+          }
           onPress={() => setChecked('M')}
         />
         <Text>Male</Text>
@@ -276,7 +287,13 @@ const UpdateProfile = ({navigation, route: {params}}) => {
         onPress={() => {
           handleSaveChanges();
         }}>
-        <Text style={style.textButton}>Save Change</Text>
+        {!isFetching ? (
+          <Text style={style.textButton}>Save Change</Text>
+        ) : (
+          <View style={{height: 25}}>
+            <ActivityIndicator color="#393939" size="small" />{' '}
+          </View>
+        )}
       </TouchableOpacity>
       <Modal
         animationType="slide"

@@ -51,8 +51,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   pageWrapper: {
-    marginTop: 10,
-    marginBottom: 30,
+    marginTop: 20,
+    marginBottom: 50,
     flexDirection: 'row',
     justifyContent: 'center',
     flexWrap: 'wrap',

@@ -29,6 +29,7 @@ const Profile = ({navigation}) => {
   const isFocused = useIsFocused();
   const [showModal, setShowModal] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [image, setImage] = useState(defaultUser);
 
   const dispatch = useDispatch();
@@ -43,8 +44,10 @@ const Profile = ({navigation}) => {
   };
   const getUserInfo = () => {
     const id = user.id;
+    setIsLoading(true);
     getUserDetail(id)
       .then(res => {
+        setIsLoading(false);
         console.log(res);
         setUserInfo(res.data.data);
         const newImage = imagehost + res.data.data.photo;
@@ -52,6 +55,7 @@ const Profile = ({navigation}) => {
         setImage({uri: newImage});
       })
       .catch(err => {
+        setIsLoading(false);
         console.log(err);
         console.log(err.response);
       });
@@ -70,7 +74,7 @@ const Profile = ({navigation}) => {
     <>
       {user && user.token && user.token !== '' ? (
         <ScrollView style={style.viewScroll}>
-          {userInfo !== null ? (
+          {userInfo !== null && !isLoading ? (
             <>
               <View style={style.profileHeader}>
                 <View style={style.imageWrapper}>
@@ -93,23 +97,26 @@ const Profile = ({navigation}) => {
                   </Text>
                 </View>
               </View>
-              <TouchableOpacity
-                style={style.menuWrapper}
-                onPress={() => {
-                  navigation.navigate('Favourite');
-                }}>
-                <View style={style.menuText}>
-                  <Text style={style.menuTextContent}>Your favourite</Text>
-                </View>
-                <View style={style.menuImageWrapper}>
-                  <Image
-                    source={require('../commons/assets/icons/next.png')}
-                    resizeMethod="scale"
-                    resizeMode="cover"
-                    style={style.menuImage}
-                  />
-                </View>
-              </TouchableOpacity>
+              {user.roles.toLowerCase() === 'customer' && (
+                <TouchableOpacity
+                  style={style.menuWrapper}
+                  onPress={() => {
+                    navigation.navigate('Favourite');
+                  }}>
+                  <View style={style.menuText}>
+                    <Text style={style.menuTextContent}>Your favourite</Text>
+                  </View>
+                  <View style={style.menuImageWrapper}>
+                    <Image
+                      source={require('../commons/assets/icons/next.png')}
+                      resizeMethod="scale"
+                      resizeMode="cover"
+                      style={style.menuImage}
+                    />
+                  </View>
+                </TouchableOpacity>
+              )}
+
               <TouchableOpacity
                 style={style.menuWrapper}
                 onPress={() => {
@@ -187,11 +194,7 @@ const Profile = ({navigation}) => {
                   <Text style={style.buttonText}>Logout</Text>
                 </View>
               </TouchableOpacity>
-            </>
-          ) : (
-            <View style={style.marginLoading}>
-              <ActivityIndicator size="large" color="#FFCD61" />
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 onPress={() => {
                   setShowModal(true);
                 }}
@@ -199,7 +202,11 @@ const Profile = ({navigation}) => {
                 <View style={style.buttonLogout}>
                   <Text style={style.buttonText}>Logout</Text>
                 </View>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
+            </>
+          ) : (
+            <View style={style.marginLoading}>
+              <ActivityIndicator size="large" color="#FFCD61" />
             </View>
           )}
         </ScrollView>
